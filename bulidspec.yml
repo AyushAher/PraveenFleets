@@ -1,0 +1,26 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      dotnet: 6.0
+   
+  pre_build:
+     commands:
+        - echo Restore started on `date`
+        - dotnet restore ./Api.sln
+  build:
+    commands:
+        - echo Build started on `date`
+        - dotnet build ./Api.sln
+        
+  post_build:
+    commands:
+      - echo Publish started on `date`
+      - dotnet publish -c Release -o ./Build ./Api.sln
+
+artifacts:
+  files:
+    - ./Build/*'
+    - appspec.yml
+    - installApp.sh
+  discard-paths: no
