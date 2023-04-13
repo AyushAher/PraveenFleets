@@ -11,12 +11,12 @@ phases:
   build:
     commands:
         - echo Build started on `date`
-        - dotnet build ./Api.sln
+        - dotnet build ./Api.csproj
         
   post_build:
     commands:
       - echo Publish started on `date`
-      - dotnet publish -c Release -o ./Build ./Api.sln
+      - dotnet publish -c Release -o ./Build ./Api.csproj
 
 artifacts:
   files:
