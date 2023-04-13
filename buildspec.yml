@@ -16,7 +16,7 @@ phases:
   post_build:
     commands:
       - echo Publish started on `date`
-      - dotnet publish -c Release -o ./Build ./Api.csproj
+      - dotnet publish -c Release -o ./Build ./Api/Api.csproj
 
 artifacts:
   files:
