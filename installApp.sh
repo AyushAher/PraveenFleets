@@ -1,2 +1,3 @@
-sudo killall -9 dotnet
-nohup dotnet /home/ubuntu/Api/Build/Api.dll &>/dev/null &
+#!/bin/bash
+cd /home/ubuntu/Api/Build
+dotnet Api.dll
