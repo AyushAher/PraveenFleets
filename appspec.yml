@@ -2,8 +2,9 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/Build
+    destination: /home/ubuntu
+    
 hooks:
   ApplicationStart:
-    - location: ./Build/installApp.sh
+    - location: ./installApp.sh
       timeout: 300
