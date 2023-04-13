@@ -5,5 +5,5 @@ files:
     destination: /home/ubuntu/Build
 hooks:
   ApplicationStart:
-    - location: ./installApp.sh
+    - location: ./Build/installApp.sh
       timeout: 300
