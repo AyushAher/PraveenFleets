@@ -20,7 +20,7 @@ phases:
 
 artifacts:
   files:
-    - .\Build\**\*
+    - ./Build/**
     - appspec.yml
     - installApp.sh
-  discard-paths: no
+  discard-paths: yes
