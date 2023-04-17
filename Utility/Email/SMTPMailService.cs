@@ -79,7 +79,9 @@ namespace Utility.Email
                 _logger.LogDebug("Initialing EMail '" + request.EMailStateID + "'");
                 var mailMessage = new MailMessage();
                 var eMailId = Guid.NewGuid();
+
                 GenerateEMail(request, eMailId, ref mailMessage);
+                
                 var smtpClient = new SmtpClient(_mailConfig.Server, _mailConfig.Port);
                 smtpClient.EnableSsl = _mailConfig.UseSsl;
 
@@ -93,12 +95,14 @@ namespace Utility.Email
                     smtpClient.Credentials = new NetworkCredential(_mailConfig.UserName, _mailConfig.Password);
                 }
 
-                if (!string.IsNullOrEmpty(_mailConfig.TargetName))
-                    smtpClient.TargetName = _mailConfig.TargetName;
+                if (!string.IsNullOrEmpty(_mailConfig.TargetName)) smtpClient.TargetName = _mailConfig.TargetName;
+                
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.Timeout = 600000;
                 smtpClient.SendCompleted += SendCompletedCallback;
+                
                 smtpClient.SendAsync(mailMessage, request.EMailStateID);
+                
                 _logger.LogDebug("Sending EMail '" + request.EMailStateID + "' has been attempted");
             }
             catch (Exception ex)

@@ -3,11 +3,13 @@ using ApplicationServices.Account;
 using ApplicationServices.Common;
 using ApplicationServices.FileShare;
 using ApplicationServices.MasterData;
+using ApplicationServices.Organizations;
 using ApplicationServices.Repository;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.FileShare;
 using Interfaces.MasterData;
+using Interfaces.Organizations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +56,9 @@ public static class AppServiceCollectionExtensions
         // Common Services
         services.AddTransient<IAddressService, AddressService>();
         services.AddTransient<IMasterDataService, MasterDataService>();
+
+        // Organization
+        services.AddScoped<IOrganizationService, OrganizationService>();
 
         return services;
     }

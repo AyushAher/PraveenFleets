@@ -3,9 +3,8 @@
 namespace Enums.Account;
 
 
-public enum PrimaryRoles : byte
+public enum UserType : byte
 {
-    [Description("Admin")] AdminRole = 10,
-    [Description("SuperAdmin")] SuperAdminRole = 20,
-    [Description("Base")] Base = 20,
+    Organization = 10,
+    CustomerSupportTeam = 20,
 }

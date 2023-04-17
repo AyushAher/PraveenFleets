@@ -33,7 +33,7 @@ public class AddressService : IAddressService
         _addressRepo = _unitOfWork.Repository<Address>();
     }
 
-    public async Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request)
+    public async Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request, bool isInTransaction = false)
     {
         try
         {
@@ -51,7 +51,7 @@ public class AddressService : IAddressService
                 return await ApiResponse<AddressResponse>.FailAsync(addressValidator.Errors, _logger);
             }
 
-            _ = await _unitOfWork.StartTransaction();
+            if(!isInTransaction) _ = await _unitOfWork.StartTransaction();
 
             // Add record
             _ = await _addressRepo.AddAsync(addressObj);
@@ -60,13 +60,13 @@ public class AddressService : IAddressService
             // Return if failed
             if (response <= 0)
             {
-                await _unitOfWork.Rollback();
+                if (!isInTransaction) await _unitOfWork.Rollback();
                 return await ApiResponse<AddressResponse>.FailAsync("Failed To Save Address. Please try again later!",
                     _logger);
             }
 
             // Commit transaction
-            await _unitOfWork.Commit();
+            if (!isInTransaction) await _unitOfWork.Commit();
 
             // Add the new record in cache
             _cache.SetInCacheMemoryAsync(addressObj);

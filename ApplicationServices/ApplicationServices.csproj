@@ -27,4 +27,10 @@
 		<ProjectReference Include="..\Utility\Utility.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="MappingProfile\Organizations\" />
+	  <Folder Include="Organizations\" />
+	</ItemGroup>
+
 </Project>

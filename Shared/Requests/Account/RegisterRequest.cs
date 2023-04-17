@@ -36,6 +36,10 @@ namespace Shared.Requests.Account
 
         public bool EmailVerified { get; set; }
 
-        public PrimaryRoles UserRole { get; set; } = PrimaryRoles.AdminRole;
+        public Guid ParentEntityId { get; set; }
+        
+        public Guid RoleId { get; set; }
+
+        public UserType UserType { get; set; }
     }
 }

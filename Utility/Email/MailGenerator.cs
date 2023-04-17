@@ -18,22 +18,13 @@ namespace Utility.Email
             _appConfig = appConfig.Value;
         }
 
-        public void DefaultEmailTemplate(
-            List<AttributeValue> attributeValue,
-            string subjectHeader,
-            out string mailContent)
+        
+        public void NewRegistrationViaEMail(string fullName, string verificationUrl, out string mailContent, out string mailSubject)
         {
-            mailContent = string.Empty;
-            try
-            {
-                _logger.LogInformation("EMail content generation for 'Default Template' successful");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical(ex, "EMail content generation for 'Default Template' failed");
-            }
+            mailSubject = "Verify Email Address";
+            mailContent = $"Hello {fullName}, \n We at Praveen Fleets are excited to welcome you and your organization and provide you with great services. Below is the verification Url please verify your email, to start using our services. \n {verificationUrl} \n Thanks Regards, \n Praveen Fleets.";
+            
         }
-
     }
 
 }

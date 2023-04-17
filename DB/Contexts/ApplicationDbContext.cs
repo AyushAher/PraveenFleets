@@ -3,6 +3,7 @@ using Domain.Common;
 using Domain.FileShare;
 using Domain.Mail;
 using Domain.MasterData;
+using Domain.Organization;
 using Interfaces.Account;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,7 +88,7 @@ public class ApplicationDbContext : AppIdentityDbContext
 
         builder.Entity<Address>(entity =>
         {
-            entity.ToTable("Address");
+            entity.ToTable("address");
             entity.HasKey(e => e.Id);
         });
 
@@ -117,6 +118,24 @@ public class ApplicationDbContext : AppIdentityDbContext
         });
 
         #endregion
+
+        #region Organization
+
+        builder.Entity<Organizations>(entity =>
+        {
+            entity.ToTable("organizations");
+            entity.HasKey(e => e.Id);
+        });
+
+        builder.Entity<OrganizationRoles>(entity =>
+        {
+            entity.ToTable("organizationRoles");
+            entity.HasKey(e => e.Id);
+        });
+
+        #endregion
+
+
 
     }
 }

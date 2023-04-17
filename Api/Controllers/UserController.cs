@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     [HttpPost("Register")]
     [AllowAnonymous]
     public async Task<ApiResponse<string>> Register(RegisterRequest request)
-        => await ApiResponse<string>.SuccessAsync(await _accountManager.RegisterUserAsync(request));
+        => await _accountManager.RegisterUserAsync(request);
 
     //POST: api/identity/account/register
     [HttpGet("Get/{id}")]

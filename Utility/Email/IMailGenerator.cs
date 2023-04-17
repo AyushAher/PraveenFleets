@@ -1,9 +1,9 @@
-﻿namespace Utility.Email;
+﻿using static Shared.Configuration.PermissionsConfiguration;
+
+namespace Utility.Email;
 
 public interface IMailGenerator
 {
-    public void DefaultEmailTemplate(
-        List<AttributeValue> attributeValue,
-        string subjectHeader,
-        out string mailContent);
+    void NewRegistrationViaEMail(string fullName, string verificationUrl, out string mailContent,
+        out string mailSubject);
 }

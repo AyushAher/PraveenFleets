@@ -44,6 +44,13 @@ public class RoleService : IRoleService, IService
         var mappedObj = _mapper.Map<RoleResponse>(data);
         return await ApiResponse<RoleResponse>.SuccessAsync(mappedObj);
     }
+    
+    public async Task<ApiResponse<RoleResponse>> GetByName(string roleName)
+    {
+        var data = await _roleManager.FindByNameAsync(roleName);
+        var mappedObj = _mapper.Map<RoleResponse>(data);
+        return await ApiResponse<RoleResponse>.SuccessAsync(mappedObj);
+    }
 
     public async Task<ApiResponse<List<RoleResponse>>> GetAllAsync()
     {
@@ -154,10 +161,7 @@ public class RoleService : IRoleService, IService
         {
             var errors = new List<string>();
             var role = await _roleManager.FindByIdAsync(request.RoleId.ToString());
-            if (role.Name == PrimaryRoles.AdminRole.ToDescriptionString())
-                return await BaseApiResponse.FailAsync("Not allowed to modify Permissions for the Admin Role.",
-                    _logger);
-
+            
             var selectedClaims = request.RoleClaims
                 .Where(a => a.Selected).ToList();
 

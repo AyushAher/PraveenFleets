@@ -11,7 +11,7 @@ public interface IRoleService : IService
 
     Task<BaseApiResponse> SaveAsync(RoleRequest request);
     Task<BaseApiResponse> DeleteAsync(Guid id);
-
+    Task<ApiResponse<RoleResponse>> GetByName(string roleName);
     Task<ApiResponse<PermissionResponse>> GetAllPermissionsAsync(Guid roleId);
 
     Task<BaseApiResponse> UpdatePermissionsAsync(PermissionRequest request);

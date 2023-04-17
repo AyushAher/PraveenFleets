@@ -6,10 +6,7 @@ namespace Interfaces.Account;
 
 public interface IUserService : IService
 {
-    //public Task<ApiResponse<UserResponse>> GetUserAsync(GetUserRequest userRequest);
-    //public Task<ApiResponse<UserResponse>> PostUserAsync(UserRequest userRequest);
-
-    Task<string> RegisterUserAsync(RegisterRequest request);
+    Task<ApiResponse<string>> RegisterUserAsync(RegisterRequest request);
 
     Task<ApiResponse<TokenResponse>> LoginAsync(LoginRequest request);
 

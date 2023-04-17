@@ -10,18 +10,6 @@ public class AddressValidator : AbstractValidator<Address>
         RuleFor(a => a.ParentId)
             .NotEmpty().WithMessage("ParentId is required.");
 
-        RuleFor(a => a.Attention)
-            .NotEmpty()
-            .WithMessage("Attention is required.")
-            .MaximumLength(100)
-            .WithMessage("Attention must not exceed 100 characters.");
-
-        RuleFor(a => a.ContactNumber)
-            .NotEmpty()
-            .WithMessage("ContactNumber is required.")
-            .MaximumLength(15)
-            .WithMessage("ContactNumber must not exceed 15 characters.");
-
         RuleFor(a => a.AddressLine1)
             .NotEmpty()
             .WithMessage("AddressLine1 is required.")

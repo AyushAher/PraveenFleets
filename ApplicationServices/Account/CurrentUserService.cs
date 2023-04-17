@@ -24,7 +24,6 @@ public class CurrentUserService : ICurrentUserService
             FirstName = claimsPrincipal.FindFirstValue(ClaimTypes.Name);
             LastName = claimsPrincipal.FindFirstValue(ClaimTypes.Surname);
             Email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
-            IsAdmin = claimsPrincipal.IsInRole(PrimaryRoles.AdminRole.ToString());
         }
         else
         {

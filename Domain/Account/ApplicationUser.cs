@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Enums.Account;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Account;
@@ -84,5 +85,8 @@ public class ApplicationUser : IdentityUser<Guid>, IAuditableEntity
     public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
 
     public ApplicationUser() => UserRoles = new HashSet<ApplicationUserRole>();
+    
+    public Guid ParentEntityId { get; set; }
 
+    public UserType UserType { get; set; }
 }

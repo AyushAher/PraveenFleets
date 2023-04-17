@@ -6,5 +6,5 @@ namespace Interfaces.Common;
 
 public interface IAddressService
 {
-    public Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request);
+    public Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request,bool isInTransaction = false);
 }
