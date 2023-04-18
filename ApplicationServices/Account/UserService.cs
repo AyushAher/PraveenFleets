@@ -7,9 +7,10 @@ using System.Security.Cryptography;
 using System.Text;
 using ApplicationServices.MappingProfile.Account;
 using AutoMapper;
+using DB.Extensions;
 using DnsClient;
 using Domain.Account;
-using Enums.Account;
+using Domain.Organization;
 using Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -19,8 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
+using Shared.Responses.Organization;
 using Utility.Email;
-using Utility.Extensions;
 
 namespace ApplicationServices.Account;
 
@@ -36,6 +37,7 @@ public class UserService : IUserService
 
     private readonly IMailGenerator _mailGenerator;
     private readonly IEMailService _mailService;
+    private readonly IUnitOfWork<Guid> _unitOfWork;
 
     public UserService(
         ICacheConfiguration<ApplicationUser> cache,
@@ -46,8 +48,9 @@ public class UserService : IUserService
         RoleManager<ApplicationRole> roleManager,
         IOptions<AppConfiguration> appConfig,
         IMailGenerator mailGenerator,
-        IEMailService eMailService
-    )
+        IEMailService eMailService,
+        IUnitOfWork<Guid> unitOfWork
+        )
     {
         _roleManager = roleManager;
         _mailGenerator = mailGenerator;
@@ -59,6 +62,7 @@ public class UserService : IUserService
         _mailService = eMailService;
         _appConfig = appConfig.Value;
         _roleManager = roleManager;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -66,7 +70,7 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="request">Request containing all user details</param>
     /// <returns>User Id</returns>
-    public async Task<ApiResponse<string>> RegisterUserAsync(RegisterRequest request)
+    public async Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request)
     {
         try
         {
@@ -74,14 +78,14 @@ public class UserService : IUserService
             {
                 var str = "The email address {0} looks invalid. Please correct the same!";
                 _logger.LogError(str, request.EMail);
-                return await ApiResponse<string>.FailAsync("E:" + string.Format(str, request.EMail), _logger);
+                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format(str, request.EMail), _logger);
             }
 
             if (await _userManager.FindByNameAsync(request.EMail) != null)
             {
                 _logger.LogError("User with email address {0} [{1}] is already registered and attempted again!",
                     request.EMail, request.FirstName + " " + request.LastName);
-                return await ApiResponse<string>.FailAsync("E:" + string.Format("User with eMail {0} is already taken.", request.EMail), _logger);
+                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format("User with eMail {0} is already taken.", request.EMail), _logger);
                 
             }
 
@@ -93,14 +97,14 @@ public class UserService : IUserService
                 {
                     _logger.LogError("User with phone number {0} [{1}] is already registered and attempted again!",
                         request.PhoneNumber, request.FirstName + " " + request.LastName);
-                    return await ApiResponse<string>.FailAsync("E:" + string.Format("Phone number {0} is already registered.",
+                    return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format("Phone number {0} is already registered.",
                         request.PhoneNumber), _logger);
                 }
             }
 
             if (request.Password != request.ConfirmPassword)
             {
-                return await ApiResponse<string>.FailAsync("E: Password and confirm password does not match", _logger);
+                return await ApiResponse<UserResponse>.FailAsync("E: Password and confirm password does not match", _logger);
             }
 
             var userId = Guid.NewGuid();
@@ -117,12 +121,12 @@ public class UserService : IUserService
                 EmailConfirmed = request.EmailVerified,
                 CreatedOn = DateTime.UtcNow,
                 TwoFactorEnabled = false,
-                UserType = UserType.Organization,
+                UserType = request.UserType,
                 ParentEntityId = request.ParentEntityId,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
-            //var userRole = await _roleService.GetByName("");
+
             if (!result.Succeeded)
             {
                 _logger.LogError("Unable to create the User {0} / {1}. Check Error Log!", request.EMail,
@@ -130,36 +134,25 @@ public class UserService : IUserService
                 foreach (var error in result.Errors)
                     _logger.LogError("Error for User {0} - Code : {1}; Description : {2}", request.EMail,
                         error.Code, error.Description);
-                return await ApiResponse<string>.FailAsync("E:" + "Sorry we have a failure. Please contact Support!", _logger);
+                return await ApiResponse<UserResponse>.FailAsync("E:" + "Sorry we have a failure. Please contact Support!", _logger);
             }
 
-            /*
-            _logger.LogInformation("Attaching the user {0} to {1}!", request.EMail, request.UserRole);
-            if (!(await _userManager.AddToRoleAsync(user, )).Succeeded)
-            {
-                _logger.LogError("Unable to create the User Role for User {0} / {1}. Check Error Log!",
-                    request.EMail, request.FirstName + " " + request.LastName);
-
-                foreach (var error in result.Errors)
-                    _logger.LogError("Error for User (Role) {0} - Code : {1}; Description : {2}",
-                        request.EMail, error.Code, error.Description);
-                return await ApiResponse<string>.FailAsync("E:" + "Sorry we have a failure. Please contact Support!", _logger);
-            }
-            */
-            _ = await SendConfirmEMailCode(user);
+            _logger.LogInformation("Attaching the user {0} to {1}!", request.EMail, request.Role);
+            
+             _ = await SendConfirmEMailCode(user);
             _logger.LogInformation("User {0} created successfully!", request.EMail);
 
             var getUserById = await GetAsync(user.Id);
             var obj = _mapper.Map<ApplicationUser>(getUserById.Data);
             _cache.SetInCacheMemoryAsync(obj);
 
-            return await ApiResponse<string>.SuccessAsync(data: user.Id.ToString());
+            return await ApiResponse<UserResponse>.SuccessAsync(getUserById.Data);
             
         }
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Registration Via email failed for user {0}", request.EMail);
-            return await ApiResponse<string>.FailAsync("E:Registration Via email failed for user " + request.EMail, _logger);
+            return await ApiResponse<UserResponse>.FailAsync("E:Registration Via email failed for user " + request.EMail, _logger);
         }
     }
 
@@ -281,7 +274,7 @@ public class UserService : IUserService
                 _ = await SendWelcomeEMail(user);
 
                 return await BaseApiResponse.SuccessAsync(
-                    string.Format("Account Confirmed for '{0}'. You can now use nicheBrains", user.FullName));
+                    string.Format("Account Confirmed for '{0}'. You can now use Praveen Fleets", user.FullName));
             }
 
             _logger.LogError("Unable to confirm user with " + request.EMail + ". Identity returned error.");
@@ -374,7 +367,7 @@ public class UserService : IUserService
             if (byEmailAsync == null)
             {
                 _logger.LogError("User {0} is not found while resetting the password!", request.EMail);
-                return await BaseApiResponse.FailAsync("Invalid User! Contact nicheBrains Support.", _logger);
+                return await BaseApiResponse.FailAsync("Invalid User! Contact Praveen Fleets Support.", _logger);
             }
 
             var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
@@ -908,10 +901,7 @@ public class UserService : IUserService
                 Encoding.UTF8.GetBytes(await _userManager.GenerateEmailConfirmationTokenAsync(user)));
         _logger.LogInformation("EMail verification code for " + user.Email + " is " + str);
 
-        return QueryHelpers.AddQueryString(
-            QueryHelpers.AddQueryString(
-                new Uri((_appConfig.SiteUrl ?? "") + _appConfig.AccConfirmPath).ToString(), "useremail",
-                user.Email), "token", str);
+        return QueryHelpers.AddQueryString(QueryHelpers.AddQueryString(new Uri((_appConfig.SiteUrl ?? "") + _appConfig.AccConfirmPath).ToString(), "userEmail",user.Email), "token", str);
     }
 
     /// <summary>

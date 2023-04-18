@@ -58,6 +58,7 @@ public static class AppServiceCollectionExtensions
         services.AddTransient<IMasterDataService, MasterDataService>();
 
         // Organization
+        services.AddScoped<IOrganizationRolesService, OrganizationRoleService>();
         services.AddScoped<IOrganizationService, OrganizationService>();
 
         return services;

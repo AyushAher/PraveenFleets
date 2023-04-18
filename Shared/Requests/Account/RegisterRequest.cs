@@ -40,6 +40,8 @@ namespace Shared.Requests.Account
         
         public Guid RoleId { get; set; }
 
+        public string Role { get; set; } = string.Empty;
+
         public UserType UserType { get; set; }
     }
 }

@@ -1,0 +1,269 @@
+<div class="container">
+    <mat-stepper [linear]="true" #stepper>
+        <mat-step [stepControl]="OrganizationForm" label="Organization Details">
+            <form [formGroup]="OrganizationForm">
+                <div class="row my-3">
+                    <div class="col-md-8 my-3">
+                        <label for="OrganizationForm">Organization Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Name of your Organization"
+                            formControlName="name" name="name" id="name"
+                            [ngClass]="{'is-invalid':form.name.touched && form.name.errors}">
+
+                        <div *ngIf="form.name.touched && form.name.errors" class="invalid-feedback">
+                            <div *ngIf="form.name.errors.required" class="text-danger">
+                                Organization Name is required
+                            </div>
+                            <div *ngIf="form.name.errors.maxlength" class="text-danger">Max Length
+                                is 200
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 my-3">
+                        <label for="gstNumber">GST Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="GST Number Of your Organization"
+                            formControlName="gstNumber" name="gstNumber" id="gstNumber"
+                            [ngClass]="{'is-invalid':form.gstNumber.touched && form.gstNumber.errors}">
+
+                        <div *ngIf="form.gstNumber.touched && form.gstNumber.errors" class="invalid-feedback">
+                            <div *ngIf="form.gstNumber.errors.required" class="text-danger">
+                                GST Number is required
+                            </div>
+                            <div *ngIf="form.gstNumber.errors.maxlength" class="text-danger">Max Length is 200
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button mat-raised-button color="primary" matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="AddressForm" label="Organization Address Details">
+            <form [formGroup]="AddressForm">
+                <div class="row my-3">
+                    <div class="col-md-6 my-3">
+                        <label for="addressLine1">Address Line 1<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Address Line 1"
+                            formControlName="addressLine1" name="addressLine1" id="addressLine1"
+                            [ngClass]="{'is-invalid':address.addressLine1.touched && address.addressLine1.errors}">
+
+                        <div *ngIf="address.addressLine1.touched && address.addressLine1.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="address.addressLine1.errors.required" class="text-danger">
+                                Address Line 1 is required
+                            </div>
+                            <div *ngIf="address.addressLine1.errors.maxlength" class="text-danger">Max Length
+                                is 250
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="addressLine2">Address Line 2<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Address Line 2"
+                            formControlName="addressLine2" name="addressLine2" id="addressLine2"
+                            [ngClass]="{'is-invalid':address.addressLine2.touched && address.addressLine2.errors}">
+
+                        <div *ngIf="address.addressLine2.touched && address.addressLine2.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="address.addressLine2.errors.required" class="text-danger">
+                                Address Line 2 is required
+                            </div>
+                            <div *ngIf="address.addressLine2.errors.maxlength" class="text-danger">Max Length
+                                is 250
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="state">State<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="State" formControlName="state" name="state"
+                            id="state" [ngClass]="{'is-invalid':address.state.touched && address.state.errors}">
+
+                        <div *ngIf="address.state.touched && address.state.errors" class="invalid-feedback">
+                            <div *ngIf="address.state.errors.required" class="text-danger">
+                                State is required
+                            </div>
+                            <div *ngIf="address.state.errors.maxlength" class="text-danger">Max Length
+                                is 100
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="city">City<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="City" formControlName="city" name="city"
+                            id="city" [ngClass]="{'is-invalid':address.city.touched && address.city.errors}">
+
+                        <div *ngIf="address.city.touched && address.city.errors" class="invalid-feedback">
+                            <div *ngIf="address.city.errors.required" class="text-danger">
+                                City is required
+                            </div>
+                            <div *ngIf="address.city.errors.maxlength" class="text-danger">Max Length
+                                is 100
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="country">Country<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Country" formControlName="country"
+                            name="country" id="country"
+                            [ngClass]="{'is-invalid':address.country.touched && address.country.errors}">
+
+                        <div *ngIf="address.country.touched && address.country.errors" class="invalid-feedback">
+                            <div *ngIf="address.country.errors.required" class="text-danger">
+                                Country is required
+                            </div>
+                            <div *ngIf="address.country.errors.maxlength" class="text-danger">Max Length
+                                is 100
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="pinCode">Pin Code<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Pin Code" formControlName="pinCode"
+                            name="pinCode" id="pinCode"
+                            [ngClass]="{'is-invalid':address.pinCode.touched && address.pinCode.errors}">
+
+                        <div *ngIf="address.pinCode.touched && address.pinCode.errors" class="invalid-feedback">
+                            <div *ngIf="address.pinCode.errors.required" class="text-danger">
+                                Pin Code is required
+                            </div>
+                            <div *ngIf="address.pinCode.errors.maxlength" class="text-danger">Max Length
+                                is 8
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button mat-raised-button color="accent" class="me-2" matStepperPrevious>Back</button>
+                    <button mat-raised-button color="primary" matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="AdminDetailsForm" label="Organization Admin Details">
+            <form [formGroup]="AdminDetailsForm">
+                <div class="row my-3">
+                    <div class="col-md-6 my-3">
+                        <label for="firstName">First Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Enter your First Name"
+                            formControlName="firstName" name="firstName" id="firstName"
+                            [ngClass]="{'is-invalid':admin.firstName.touched && admin.firstName.errors}">
+
+                        <div *ngIf="admin.firstName.touched && admin.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="admin.firstName.errors.required" class="text-danger">
+                                First Name is required
+                            </div>
+                            <div *ngIf="admin.firstName.errors.maxlength" class="text-danger">Max Length
+                                is 60
+                            </div>
+                            <div *ngIf="admin.firstName.errors.minlength" class="text-danger">Min Length
+                                is 1
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="lastName">Last Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Enter your Last name"
+                            formControlName="lastName" name="lastName" id="lastName"
+                            [ngClass]="{'is-invalid':admin.lastName.touched && admin.lastName.errors}">
+
+                        <div *ngIf="admin.lastName.touched && admin.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="admin.lastName.errors.required" class="text-danger">
+                                Last Name is required
+                            </div>
+                            <div *ngIf="admin.lastName.errors.maxlength" class="text-danger">
+                                Max Length is 60
+                            </div>
+                            <div *ngIf="admin.lastName.errors.minlength" class="text-danger">
+                                Min Length is 1
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="eMail">Email Id<span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" placeholder="Enter your Email Id"
+                            formControlName="eMail" name="eMail" id="eMail"
+                            [ngClass]="{'is-invalid':admin.eMail.touched && admin.eMail.errors}">
+
+                        <div *ngIf="admin.eMail.touched && admin.eMail.errors" class="invalid-feedback">
+                            <div *ngIf="admin.eMail.errors.required" class="text-danger">
+                                Email Id is required
+                            </div>
+                            <div *ngIf="admin.eMail.errors.pattern" class="text-danger">
+                                Not a valid Email Id
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="phoneNumber">Phone Number<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" placeholder="Enter your Phone Number"
+                            formControlName="phoneNumber" name="phoneNumber" id="phoneNumber"
+                            [ngClass]="{'is-invalid':admin.phoneNumber.touched && admin.phoneNumber.errors}">
+
+                        <div *ngIf="admin.phoneNumber.touched && admin.phoneNumber.errors" class="invalid-feedback">
+                            <div *ngIf="admin.phoneNumber.errors.required" class="text-danger">
+                                Phone Number is required
+                            </div>
+                            <div *ngIf="admin.phoneNumber.errors.maxlength" class="text-danger">
+                                Max Length is 250
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="password">Password<span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" placeholder="Enter a Password"
+                            formControlName="password" name="password" id="password"
+                            [ngClass]="{'is-invalid':admin.password.touched && admin.password.errors}">
+
+                        <div *ngIf="admin.password.touched && admin.password.errors" class="invalid-feedback">
+                            <div *ngIf="admin.password.errors.required" class="text-danger">
+                                Password is required
+                            </div>
+                            <div *ngIf="admin.password.errors.maxlength" class="text-danger">
+                                Max Length is 20
+                            </div>
+                            <div *ngIf="admin.password.errors.minlength" class="text-danger">
+                                Min Length is 6
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 my-3">
+                        <label for="confirmPassword">Confirm Password<span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" placeholder="Confirm the Password"
+                            formControlName="confirmPassword" name="confirmPassword" id="confirmPassword"
+                            [ngClass]="{'is-invalid':admin.confirmPassword.touched && admin.confirmPassword.errors}">
+
+                        <div *ngIf="admin.confirmPassword.touched && admin.confirmPassword.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="admin.confirmPassword.errors.required" class="text-danger">
+                                confirm Password is required
+                            </div>
+                            <div *ngIf="admin.confirmPassword.errors.maxlength" class="text-danger">
+                                Max Length is 20
+                            </div>
+                            <div *ngIf="admin.confirmPassword.errors.minlength" class="text-danger">
+                                Min Length is 6
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button mat-raised-button color="accent" class="me-2" matStepperPrevious>Back</button>
+                    <button mat-raised-button color="primary" (click)="OnSubmit()">Reset</button>
+                </div>
+            </form>
+
+        </mat-step>
+    </mat-stepper>
+</div>
+
+
+<style>
+    .mat-stepper-horizontal {
+        margin-top: 8px;
+    }
+
+    .mat-mdc-form-field {
+        margin-top: 16px;
+    }
+</style>

@@ -1,0 +1,12 @@
+<app-nav-bar *ngIf="showNavbar"></app-nav-bar>
+<div class="d-flex" style="max-height: 100vh;">
+    <app-side-nav-bar *ngIf="showSidebar"></app-side-nav-bar>
+
+    <div class="container-fluid p-3 mt-3" style="height: 100vh; overflow-y: auto;">
+        <div class="spinner" style="position: absolute;left: 50%;top: 40%;">
+            <mat-progress-spinner *ngIf="showSpinner" class="example-margin" [color]="color" [mode]="mode">
+            </mat-progress-spinner>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

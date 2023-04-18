@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     //POST: api/identity/account/register
     [HttpPost("Register")]
     [AllowAnonymous]
-    public async Task<ApiResponse<string>> Register(RegisterRequest request)
+    public async Task<ApiResponse<UserResponse>> Register(RegisterRequest request)
         => await _accountManager.RegisterUserAsync(request);
 
     //POST: api/identity/account/register

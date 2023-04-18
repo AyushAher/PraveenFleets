@@ -1,4 +1,5 @@
-﻿using Shared.Configuration;
+﻿using Domain.Account;
+using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
 
@@ -6,7 +7,7 @@ namespace Interfaces.Account;
 
 public interface IUserService : IService
 {
-    Task<ApiResponse<string>> RegisterUserAsync(RegisterRequest request);
+    Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request);
 
     Task<ApiResponse<TokenResponse>> LoginAsync(LoginRequest request);
 

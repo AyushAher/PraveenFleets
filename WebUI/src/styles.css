@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --primaryColor: #fafafa;
+  --secondaryColor: #3f51b5;
+}
+
+.color-white {
+  color: white !important;
+}
+
+.color-default {
+  color: var(--secondaryColor);
+}
+
+.invalid-feedback>div {
+  color: var(--bs-danger-rgb);
+}
+
+.bi,
+i {
+  /* color: var(--secondaryColor) !important; */
+  font-size: larger;
+}
+
+.form-group {
+  margin: 5px 0;
+}
+
+.ag-header {
+  background-color: var(--primaryColor) !important;
+}
+
+.ag-theme-alpine {
+  width: 100%;
+  height: 500px
+}
+
+body {
+  overflow-y: clip;
+  width: 100vw !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

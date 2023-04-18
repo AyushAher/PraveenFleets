@@ -1,0 +1,34 @@
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" [routerLink]="['/']">Praveen Fleets</a>
+            <button class="navbar-toggler color-white" type="button" data-toggle="collapse"
+                data-target=".navbar-collapse" aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded"
+                (click)="toggle()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5"
+                [ngClass]="{ show: isExpanded }">
+                <ul class="navbar-nav flex-grow">
+                    <li class="nav-item" [routerLinkActive]="['link-active']"
+                        [routerLinkActiveOptions]="{ exact: true }">
+                        <a class="nav-link">{{User?.userName}}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            {{User?.userName}}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- <li><a class="dropdown-item" href="#">Organization Id: </a></li> -->
+                            <!-- <li><a class="dropdown-item" href="#">Change Password</a></li> -->
+                            <li>
+                                <a class="dropdown-item" (click)="Logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

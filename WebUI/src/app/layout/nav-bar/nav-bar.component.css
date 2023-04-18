@@ -1,0 +1,31 @@
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+  box-shadow: 0 6px 9px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+}
+
+.navbar {
+  background-color: var(--secondaryColor) !important;
+  border-bottom: 1px solid var(--primaryColor);
+  box-shadow: 0 6px 9px -1px #0003, 0 6px 10px #00000024, 0 1px 18px #0000001f;
+}
+
+a,
+li,
+button {
+  color: var(--primaryColor) !important;
+}

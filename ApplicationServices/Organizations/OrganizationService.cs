@@ -1,7 +1,9 @@
-﻿using Amazon.S3.Model.Internal.MarshallTransformations;
+﻿using Amazon.Runtime.Internal;
+using Amazon.S3.Model.Internal.MarshallTransformations;
 using ApplicationServices.MappingProfile.Organizations;
 using AutoMapper;
 using DB.Extensions;
+using Enums.Account;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.Organizations;
@@ -10,6 +12,7 @@ using Shared.Configuration;
 using Shared.Requests.Organization;
 using Shared.Responses.Common;
 using Shared.Responses.Organization;
+using static Shared.Configuration.PermissionsConfiguration;
 
 namespace ApplicationServices.Organizations;
 
@@ -24,6 +27,7 @@ public class OrganizationService : IOrganizationService
     private readonly IAddressService _addressService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IOrganizationRolesService _organizationRolesService;
 
     public OrganizationService( 
         IMapper mapper,
@@ -32,7 +36,8 @@ public class OrganizationService : IOrganizationService
         IUnitOfWork<Guid> unitOfWork,
         ICacheConfiguration<Domain.Organization.Organizations> cache,
         IAddressService addressService,
-        IUserService userService
+        IUserService userService,
+        IOrganizationRolesService organizationRolesService
             )
     {
         _mapper = mapper;
@@ -43,6 +48,7 @@ public class OrganizationService : IOrganizationService
         _cache = cache;
         _addressService  = addressService;
         _userService = userService;
+        _organizationRolesService = organizationRolesService;
     }
 
 
@@ -54,6 +60,8 @@ public class OrganizationService : IOrganizationService
             registerOrganizationRequest.Id = Guid.NewGuid();
             registerOrganizationRequest.AddressRequest.ParentId = registerOrganizationRequest.Id;
             registerOrganizationRequest.AdminDetailsRequest.ParentEntityId = registerOrganizationRequest.Id;
+            registerOrganizationRequest.AdminDetailsRequest.UserType = UserType.Organization;
+            registerOrganizationRequest.AdminDetailsRequest.Role = "Admin";
             
             _ = await _unitOfWork.StartTransaction();
 
@@ -77,7 +85,7 @@ public class OrganizationService : IOrganizationService
 
             var organizationMappedObj = _mapper.Map<Domain.Organization.Organizations>(registerOrganizationRequest);
             organizationMappedObj.AddressId = addressRegisterRequest.Data.Id;
-            organizationMappedObj.AdminId = Guid.Parse(adminRegisterRequest.Data);
+            organizationMappedObj.AdminId = adminRegisterRequest.Data.Id;
 
 
             var organizationValidators = new OrganizationValidators();
@@ -99,8 +107,10 @@ public class OrganizationService : IOrganizationService
                 await _unitOfWork.Rollback();
                 return await ApiResponse<OrganizationResponse>.FailAsync(
                     "Failed To Save Organization. Please try again later!",
-                    _logger);
+                _logger);
             }
+
+            _ = await _organizationRolesService.UpSertUserRole("Admin", adminRegisterRequest.Data);
 
             // Commit transaction
             await _unitOfWork.Commit();
