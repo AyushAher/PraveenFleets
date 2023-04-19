@@ -3,7 +3,7 @@ using Shared.Requests.Common;
 
 namespace Shared.Requests.Organization;
 
-public class RegisterOrganization
+public class RegisterOrganizationRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

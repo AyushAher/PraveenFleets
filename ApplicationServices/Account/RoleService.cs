@@ -74,6 +74,7 @@ public class RoleService : IRoleService, IService
         }
 
         var existingRole = await _roleManager.FindByIdAsync(request.Id.ToString());
+        
         if (existingRole is { Name: "Admin" })
                 return await BaseApiResponse.FailAsync($"Not allowed to modify {existingRole.Name} Role.", _logger);
       

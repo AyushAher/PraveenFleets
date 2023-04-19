@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { RegisterRoutingModule } from './register-routing.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OrganizationRoutingModule } from './organization-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ResponseInterceptor, ErrorInterceptor } from 'src/app/_helpers/interceptor';
-import { JwtInterceptor } from 'src/app/_helpers/jwtinterceptor';
-import { RegisterCompanyComponent } from './company/register-company.component';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { ResponseInterceptor, ErrorInterceptor } from '../_helpers/interceptor';
+import { JwtInterceptor } from '../_helpers/jwtinterceptor';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { RegisterCompanyComponent } from './register/register-company.component';
 
 
 @NgModule({
@@ -18,7 +18,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/mat
   ],
   imports: [
     CommonModule,
-    RegisterRoutingModule,
+    OrganizationRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -46,4 +46,4 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/mat
 
   ],
 })
-export class RegisterModule { }
+export class OrganizationModule { }

@@ -8,10 +8,10 @@ public class OrganizationsProfile : Profile
 {
     public OrganizationsProfile()
     {
-        CreateMap<RegisterOrganization, OrganizationResponse>()
+        CreateMap<RegisterOrganizationRequest, OrganizationResponse>()
             .ReverseMap();
         
-        CreateMap<RegisterOrganization, Domain.Organization.Organizations>()
+        CreateMap<RegisterOrganizationRequest, Domain.Organization.Organizations>()
             .ReverseMap();
      
         CreateMap<Domain.Organization.Organizations, OrganizationResponse>()

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-organization',
-  templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.css']
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class OrganizationDashboardComponent implements OnInit {
 

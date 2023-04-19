@@ -3,10 +3,12 @@ using AutoMapper;
 using Domain.Account;
 using Interfaces;
 using Interfaces.Account;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
+using Shared.Responses.Organization;
 
 namespace ApplicationServices.Account;
 
@@ -15,15 +17,21 @@ public class RoleClaimService : IRoleClaimService, IService
     private readonly ILogger _logger;
     private readonly IRoleClaimsRepository _roleClaimRepo;
     private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
 
     public RoleClaimService(
         ILogger<RoleClaimService> logger,
         IRoleClaimsRepository roleClaimsRepository,
-        IMapper mapper)
+        IMapper mapper,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager)
     {
         _logger = logger;
         _roleClaimRepo = roleClaimsRepository;
         _mapper = mapper;
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<int> GetCountAsync() => await _roleClaimRepo.CountAsync();
@@ -33,6 +41,30 @@ public class RoleClaimService : IRoleClaimService, IService
         var data = await _roleClaimRepo.GetByIdAsync(id);
         var mappedObj = _mapper.Map<RoleClaimResponse>(data);
         return await ApiResponse<RoleClaimResponse>.SuccessAsync(mappedObj);
+    }
+
+    public async Task<ApiResponse<List<ApplicationRole>>> GetRoleByUserId(Guid userId)
+    {
+        try
+        {
+            var roleList = new List<ApplicationRole>();
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var rolesAsync = await _userManager.GetRolesAsync(user);
+
+            if (rolesAsync != null)
+            {
+                return await ApiResponse<List<ApplicationRole>>.FailAsync();
+            }
+
+            foreach (var role in rolesAsync)
+                roleList.Add(await _roleManager.FindByNameAsync(role));
+
+            return await ApiResponse<List<ApplicationRole>>.SuccessAsync(roleList);
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<List<ApplicationRole>>.FatalAsync(e, _logger);
+        }
     }
 
     public async Task<ApiResponse<List<RoleClaimResponse>>> GetAllByRoleIdAsync(Guid roleId)

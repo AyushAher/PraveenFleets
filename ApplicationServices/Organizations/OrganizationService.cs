@@ -21,27 +21,26 @@ public class OrganizationService : IOrganizationService
 
     private readonly ILogger<OrganizationService> _logger;
     private readonly IUnitOfWork<Guid> _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
     private readonly IRepositoryAsync<Domain.Organization.Organizations, Guid> _organizationsRepo;
     private readonly ICacheConfiguration<Domain.Organization.Organizations> _cache;
     private readonly IAddressService _addressService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IOrganizationRolesService _organizationRolesService;
+    private readonly IOrganizationUserService _organizationUserService;
 
     public OrganizationService( 
         IMapper mapper,
-        ICurrentUserService currentUserService,
         ILogger<OrganizationService> logger,
         IUnitOfWork<Guid> unitOfWork,
         ICacheConfiguration<Domain.Organization.Organizations> cache,
         IAddressService addressService,
         IUserService userService,
-        IOrganizationRolesService organizationRolesService
+        IOrganizationRolesService organizationRolesService,
+        IOrganizationUserService organizationUserService
             )
     {
         _mapper = mapper;
-        _currentUserService = currentUserService;
         _logger = logger;
         _unitOfWork = unitOfWork;
         _organizationsRepo = unitOfWork.Repository<Domain.Organization.Organizations>();
@@ -49,11 +48,12 @@ public class OrganizationService : IOrganizationService
         _addressService  = addressService;
         _userService = userService;
         _organizationRolesService = organizationRolesService;
+        _organizationUserService = organizationUserService;
     }
 
 
     public async Task<ApiResponse<OrganizationResponse>> RegisterOrganization(
-        RegisterOrganization registerOrganizationRequest)
+        RegisterOrganizationRequest registerOrganizationRequest)
     {
         try
         {
@@ -110,10 +110,25 @@ public class OrganizationService : IOrganizationService
                 _logger);
             }
 
-            _ = await _organizationRolesService.UpSertUserRole("Admin", adminRegisterRequest.Data);
-
             // Commit transaction
             await _unitOfWork.Commit();
+            
+            var orgRoleRequestObj = new CreateOrganizationRolesRequest()
+            {
+                RoleName = "Admin",
+                User = adminRegisterRequest.Data
+            };
+
+
+            _ = await _organizationRolesService.UpSertUserRole(orgRoleRequestObj);
+
+            var orgUserReq = new RegisterOrganizationUserRequest
+            {
+                OrganizationId = organizationMappedObj.Id,
+                UserId = organizationMappedObj.AdminId,
+            };
+
+            _organizationUserService.AddUserToOrganization(orgUserReq);
 
             // Add the new record in cache
             _cache.SetInCacheMemoryAsync(organizationMappedObj);

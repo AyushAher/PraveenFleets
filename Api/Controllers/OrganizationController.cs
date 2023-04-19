@@ -19,6 +19,6 @@ public class OrganizationController : ControllerBase
 
     [HttpPost("Register")]
     public async Task<ApiResponse<OrganizationResponse>> RegisterOrganization(
-        RegisterOrganization registerOrganizationRequest)
+        RegisterOrganizationRequest registerOrganizationRequest)
         => await _organizationService.RegisterOrganization(registerOrganizationRequest);
 }

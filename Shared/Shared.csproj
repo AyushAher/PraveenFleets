@@ -16,8 +16,4 @@
 		<ProjectReference Include="..\Enums\Enums.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Requests\Organization\" />
-	</ItemGroup>
-
 </Project>

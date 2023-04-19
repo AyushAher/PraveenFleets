@@ -2,12 +2,15 @@
 using DB.Extensions;
 using Domain.Account;
 using Domain.Organization;
+using Interfaces.Account;
 using Interfaces.Organizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Configuration;
+using Shared.Requests.Organization;
 using Shared.Responses.Account;
+using Shared.Responses.Organization;
 using Utility.Email;
 
 namespace ApplicationServices.Organizations;
@@ -20,6 +23,8 @@ public class OrganizationRoleService : IOrganizationRolesService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IUnitOfWork<Guid> _unitOfWork;
+    private readonly IRoleService _roleService;
+    private readonly IRepositoryAsync<OrganizationRoles, Guid> _organizationRolesRepo;
 
     public OrganizationRoleService(
         ICacheConfiguration<ApplicationUser> cache,
@@ -27,7 +32,8 @@ public class OrganizationRoleService : IOrganizationRolesService
         ILogger<OrganizationRoleService> logger,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
-        IUnitOfWork<Guid> unitOfWork
+        IUnitOfWork<Guid> unitOfWork,
+        IRoleService roleService
     )
     {
         _roleManager = roleManager;
@@ -37,22 +43,24 @@ public class OrganizationRoleService : IOrganizationRolesService
         _userManager = userManager;
         _roleManager = roleManager;
         _unitOfWork = unitOfWork;
+        _roleService = roleService;
+        _organizationRolesRepo = _unitOfWork.Repository<OrganizationRoles>();
     }
     
-    public async Task<ApiResponse<bool>> UpSertUserRole(string role, UserResponse userResponse)
+    public async Task<ApiResponse<bool>> UpSertUserRole(CreateOrganizationRolesRequest request)
     {
         try
         {
             _ = await _unitOfWork.StartTransaction();
-            var user = _mapper.Map<ApplicationUser>(userResponse);
+            var user = await _userManager.FindByNameAsync(request.User.Email);
             // Check if role exists in org. as well as in roles
-            if (!await _roleManager.RoleExistsAsync(role))
+            if (!await _roleManager.RoleExistsAsync(request.RoleName))
             {
                 var applicationRole = new ApplicationRole()
                 {
                     Id = Guid.NewGuid(),
-                    Name = role,
-                    NormalizedName = _roleManager.NormalizeKey(role),
+                    Name = request.RoleName,
+                    NormalizedName = _roleManager.NormalizeKey(request.RoleName),
                 };
 
                 var result = await _roleManager.CreateAsync(applicationRole);
@@ -67,7 +75,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                 }
             }
 
-            var roles = await _roleManager.FindByNameAsync(role);
+            var roles = await _roleManager.FindByNameAsync(request.RoleName);
 
             var orgRole = new OrganizationRoles
             {
@@ -76,7 +84,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                 RoleId = roles.Id
             };
 
-            await _unitOfWork.Repository<OrganizationRoles>().AddAsync(orgRole);
+            await _organizationRolesRepo.AddAsync(orgRole);
             var response = await _unitOfWork.Save(CancellationToken.None);
 
             // Return if failed
@@ -89,7 +97,7 @@ public class OrganizationRoleService : IOrganizationRolesService
             }
 
             // Assign role to user
-            if (!(await _userManager.AddToRoleAsync(user, role)).Succeeded)
+            if (!(await _userManager.AddToRoleAsync(user, request.RoleName)).Succeeded)
             {
                 await _unitOfWork.Rollback();
 
@@ -111,4 +119,25 @@ public class OrganizationRoleService : IOrganizationRolesService
         }
     }
 
+    public async Task<ApiResponse<OrganizationRoleResponse>> GetOrgRoleByUserId(Guid userId)
+    {
+        try
+        {
+            if (userId == Guid.Empty)
+            {
+                return await ApiResponse<OrganizationRoleResponse>.FailAsync(
+                    "Some Error occurred, while querying for user role.", _logger);
+            }
+            
+
+            
+
+
+            return await ApiResponse<OrganizationRoleResponse>.SuccessAsync();
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<OrganizationRoleResponse>.FatalAsync(e, _logger);
+        }
+    }
 }

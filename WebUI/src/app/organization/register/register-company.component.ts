@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../_services/user-service.service';
-import LayoutService from 'src/app/_services/layout.service';
-import OrganizationService from '../../_services/organization-service.service';
+import OrganizationService from '../_services/organization-service.service';
 import { Router } from '@angular/router';
 import { RegisterOrganizationRequest } from 'src/app/_requests/register-request';
 
@@ -18,7 +16,6 @@ export class RegisterCompanyComponent implements OnInit {
   constructor(
     _FormBuilder: FormBuilder,
     private organizationService: OrganizationService,
-    private layoutService: LayoutService,
     private router: Router
   ) {
     this.OrganizationForm = _FormBuilder.group({
@@ -79,7 +76,7 @@ export class RegisterCompanyComponent implements OnInit {
     this.organizationService.Save(formData)
       .subscribe(data => {
         if (!data) return;
-        this.router.navigate(['/dashboard', "organization"]);
+        this.router.navigate(["dashboard"]);
       })
   }
 

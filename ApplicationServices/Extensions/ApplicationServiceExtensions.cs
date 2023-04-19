@@ -5,6 +5,8 @@ using ApplicationServices.FileShare;
 using ApplicationServices.MasterData;
 using ApplicationServices.Organizations;
 using ApplicationServices.Repository;
+using ApplicationServices.Weatherforecast;
+using Interfaces;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.FileShare;
@@ -47,6 +49,8 @@ public static class AppServiceCollectionExtensions
         this IServiceCollection services)
     {
 
+        services.AddSingleton<IWeatherForecast, WeatherForecastService>();
+
         // Utility Services
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<IUserService, UserService>();
@@ -60,6 +64,7 @@ public static class AppServiceCollectionExtensions
         // Organization
         services.AddScoped<IOrganizationRolesService, OrganizationRoleService>();
         services.AddScoped<IOrganizationService, OrganizationService>();
+        services.AddScoped<IOrganizationUserService, OrganizationUserService>();
 
         return services;
     }

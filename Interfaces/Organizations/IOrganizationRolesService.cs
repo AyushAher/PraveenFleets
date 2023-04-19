@@ -1,9 +1,13 @@
 ﻿using Shared.Configuration;
+using Shared.Requests.Organization;
 using Shared.Responses.Account;
+using Shared.Responses.Organization;
 
 namespace Interfaces.Organizations;
 
-public interface IOrganizationRolesService
+public interface IOrganizationRolesService: IService
 {
-    Task<ApiResponse<bool>> UpSertUserRole(string role, UserResponse userResponse);
+    Task<ApiResponse<bool>> UpSertUserRole(CreateOrganizationRolesRequest request);
+    
+    Task<ApiResponse<OrganizationRoleResponse>> GetOrgRoleByUserId(Guid userId);
 }

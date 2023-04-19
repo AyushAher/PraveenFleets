@@ -13,7 +13,7 @@ import { JwtInterceptor } from './_helpers/jwtinterceptor';
 import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { DashboardModule } from './dashboard/dashboard.module'
+
 
 @NgModule({
   declarations: [
@@ -31,7 +31,6 @@ import { DashboardModule } from './dashboard/dashboard.module'
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
-    DashboardModule
   ],
   providers: [
     {

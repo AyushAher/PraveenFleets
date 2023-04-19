@@ -9,10 +9,6 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: "register",
-    loadChildren: () => import("./register/register.module").then(x => x.RegisterModule)
-  },
-  {
     path: "confirmEmail",
     component: ConfirmEmailComponent
   }

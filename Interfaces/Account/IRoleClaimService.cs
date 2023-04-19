@@ -1,4 +1,5 @@
-﻿using Shared.Configuration;
+﻿using Domain.Account;
+using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
 
@@ -10,7 +11,9 @@ public interface IRoleClaimService : IService
     Task<int> GetCountAsync();
 
     Task<ApiResponse<RoleClaimResponse>> GetByIdAsync(int id);
-
+    
+    Task<ApiResponse<List<ApplicationRole>>> GetRoleByUserId(Guid userId);
+    
     Task<ApiResponse<List<RoleClaimResponse>>> GetAllByRoleIdAsync(Guid roleId);
 
     Task<ApiResponse<List<RoleClaimResponse>>> GetAllAsync();
