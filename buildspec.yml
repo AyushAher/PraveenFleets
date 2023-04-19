@@ -23,4 +23,7 @@ artifacts:
     - ./Build/**
     - appspec.yml
     - installApp.sh
+    - docker-compose.yml
+    - docker-compose.override.yml
+    - .dockerignore
   discard-paths: yes
