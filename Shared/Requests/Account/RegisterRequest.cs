@@ -19,7 +19,7 @@ namespace Shared.Requests.Account
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         [Display(Name = "Email")]
-        public string EMail { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
         [StringLength(25, MinimumLength = 6,
             ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.")]

@@ -1,5 +1,4 @@
 ﻿using Interfaces.Account;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
 using Shared.Requests.Account;

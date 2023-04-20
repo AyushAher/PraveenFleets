@@ -28,7 +28,7 @@ public class UserResponse
 
     public string? NormalizedEmail { get; set; }
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
 
     public string FirstName

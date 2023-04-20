@@ -1,6 +1,5 @@
 ﻿using Shared.Configuration;
 using Shared.Requests.Organization;
-using Shared.Responses.Account;
 using Shared.Responses.Organization;
 
 namespace Interfaces.Organizations;

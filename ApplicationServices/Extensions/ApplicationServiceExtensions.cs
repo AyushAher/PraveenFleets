@@ -65,6 +65,7 @@ public static class AppServiceCollectionExtensions
         services.AddScoped<IOrganizationRolesService, OrganizationRoleService>();
         services.AddScoped<IOrganizationService, OrganizationService>();
         services.AddScoped<IOrganizationUserService, OrganizationUserService>();
+        services.AddScoped<IOrganizationEmployeeService, OrganizationEmployeeService>();
 
         return services;
     }

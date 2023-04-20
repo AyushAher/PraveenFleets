@@ -1,8 +1,9 @@
-﻿using Shared.Requests.Organization;
+﻿using Shared.Configuration;
+using Shared.Requests.Organization;
 
 namespace Interfaces.Organizations;
 
 public interface IOrganizationUserService : IService
 {
-    void AddUserToOrganization(RegisterOrganizationUserRequest request);
+    Task<BaseApiResponse> AddUserToOrganization(RegisterOrganizationUserRequest request);
 }

@@ -6,12 +6,9 @@ using Interfaces.Account;
 using Interfaces.Organizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Shared.Configuration;
 using Shared.Requests.Organization;
-using Shared.Responses.Account;
 using Shared.Responses.Organization;
-using Utility.Email;
 
 namespace ApplicationServices.Organizations;
 
@@ -53,6 +50,7 @@ public class OrganizationRoleService : IOrganizationRolesService
         {
             _ = await _unitOfWork.StartTransaction();
             var user = await _userManager.FindByNameAsync(request.User.Email);
+            
             // Check if role exists in org. as well as in roles
             if (!await _roleManager.RoleExistsAsync(request.RoleName))
             {
@@ -76,24 +74,30 @@ public class OrganizationRoleService : IOrganizationRolesService
             }
 
             var roles = await _roleManager.FindByNameAsync(request.RoleName);
+            var objExists = _organizationRolesRepo.Entities.Any(x =>
+                                            x.RoleId == roles.Id && 
+                                            x.OrganizationId == user.ParentEntityId);
 
-            var orgRole = new OrganizationRoles
+            if (!objExists)
             {
-                Id = Guid.NewGuid(),
-                OrganizationId = user.ParentEntityId,
-                RoleId = roles.Id
-            };
+                var orgRole = new OrganizationRoles
+                {
+                    Id = Guid.NewGuid(),
+                    OrganizationId = user.ParentEntityId,
+                    RoleId = roles.Id
+                };
 
-            await _organizationRolesRepo.AddAsync(orgRole);
-            var response = await _unitOfWork.Save(CancellationToken.None);
+                await _organizationRolesRepo.AddAsync(orgRole);
+                var response = await _unitOfWork.Save(CancellationToken.None);
 
-            // Return if failed
-            if (response <= 0)
-            {
-                await _unitOfWork.Rollback();
-                return await ApiResponse<bool>.FailAsync(
-                    "Failed To Save Organization Role. Please try again later!",
-                    _logger);
+                // Return if failed
+                if (response <= 0)
+                {
+                    await _unitOfWork.Rollback();
+                    return await ApiResponse<bool>.FailAsync(
+                        "Failed To Save Organization Role. Please try again later!",
+                        _logger);
+                }
             }
 
             // Assign role to user
@@ -129,7 +133,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                     "Some Error occurred, while querying for user role.", _logger);
             }
             
-
+            
             
 
 

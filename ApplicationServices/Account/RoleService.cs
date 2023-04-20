@@ -1,7 +1,6 @@
 ﻿using ApplicationServices.Repository;
 using AutoMapper;
 using Domain.Account;
-using Enums.Account;
 using Interfaces;
 using Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
-using Utility.Extensions;
 
 namespace ApplicationServices.Account;
 

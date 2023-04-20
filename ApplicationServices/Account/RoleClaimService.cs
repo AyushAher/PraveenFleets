@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
-using Shared.Responses.Organization;
 
 namespace ApplicationServices.Account;
 

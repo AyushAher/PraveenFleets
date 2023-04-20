@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Enums.Account;
+﻿namespace Enums.Account;
 
 
 public enum UserType : byte

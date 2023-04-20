@@ -1,6 +1,4 @@
-﻿using static Shared.Configuration.PermissionsConfiguration;
-
-namespace Utility.Email;
+﻿namespace Utility.Email;
 
 public interface IMailGenerator
 {

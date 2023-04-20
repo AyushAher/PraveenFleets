@@ -110,30 +110,39 @@ public sealed class CacheConfiguration<T> : ICacheConfiguration<T>
     /// <param name="obj">Model Class</param>
     public async void SetInCacheMemoryAsync(T obj)
     {
-        var cacheObj = GetCacheObj(obj);
-
-        var serialObj = JsonSerializer.Serialize(obj);
-        var allExistingKeys = await GetAllFromCacheMemoryAsync(obj);
-        var size = allExistingKeys.Count + 1;
-        HashEntry[] hashArray;
-
-        hashArray = new[]
+        try
         {
-            new HashEntry($"{cacheObj.Key}:{cacheObj.Id}", serialObj)
-        };
 
-        if (size > 1)
-        {
-            for (var i = 0; i < allExistingKeys.Count; i++)
+            var cacheObj = GetCacheObj(obj);
+
+            var serialObj = JsonSerializer.Serialize(obj);
+            var allExistingKeys = await GetAllFromCacheMemoryAsync(obj);
+            var size = allExistingKeys.Count + 1;
+            HashEntry[] hashArray;
+
+            hashArray = new[]
             {
-                var id = typeof(T).GetProperty("Id")!.GetValue(obj)!.ToString();
-                var serial = JsonSerializer.Serialize(allExistingKeys[i]);
-                var entry = new HashEntry($"{cacheObj.Key}:{cacheObj.Id}", serial);
-                hashArray.Append(entry);
+                new HashEntry($"{cacheObj.Key}:{cacheObj.Id}", serialObj)
+            };
+
+            if (size > 1)
+            {
+                for (var i = 0; i < allExistingKeys.Count; i++)
+                {
+                    var id = typeof(T).GetProperty("Id")!.GetValue(obj)!.ToString();
+                    var serial = JsonSerializer.Serialize(allExistingKeys[i]);
+                    var entry = new HashEntry($"{cacheObj.Key}:{cacheObj.Id}", serial);
+                    hashArray.Append(entry);
+                }
             }
+
+            await cacheObj.CacheDatabase!.HashSetAsync(cacheObj.Key, hashArray);
+        }
+        catch (Exception e)
+        {
+            var ex  = e.ToString();
         }
 
-        await cacheObj.CacheDatabase!.HashSetAsync(cacheObj.Key, hashArray);
     }
 
     /// <summary>

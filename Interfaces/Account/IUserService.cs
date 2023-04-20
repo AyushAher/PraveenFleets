@@ -1,5 +1,4 @@
-﻿using Domain.Account;
-using Shared.Configuration;
+﻿using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
 

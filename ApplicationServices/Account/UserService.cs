@@ -10,7 +10,6 @@ using AutoMapper;
 using DB.Extensions;
 using DnsClient;
 using Domain.Account;
-using Domain.Organization;
 using Interfaces.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -20,7 +19,6 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
-using Shared.Responses.Organization;
 using Utility.Email;
 
 namespace ApplicationServices.Account;
@@ -74,18 +72,18 @@ public class UserService : IUserService
     {
         try
         {
-            if (!await IsValidAsync(request.EMail))
+            if (!await IsValidAsync(request.Email))
             {
                 var str = "The email address {0} looks invalid. Please correct the same!";
-                _logger.LogError(str, request.EMail);
-                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format(str, request.EMail), _logger);
+                _logger.LogError(str, request.Email);
+                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format(str, request.Email), _logger);
             }
 
-            if (await _userManager.FindByNameAsync(request.EMail) != null)
+            if (await _userManager.FindByNameAsync(request.Email) != null)
             {
                 _logger.LogError("User with email address {0} [{1}] is already registered and attempted again!",
-                    request.EMail, request.FirstName + " " + request.LastName);
-                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format("User with eMail {0} is already taken.", request.EMail), _logger);
+                    request.Email, request.FirstName + " " + request.LastName);
+                return await ApiResponse<UserResponse>.FailAsync("E:" + string.Format("User with eMail {0} is already taken.", request.Email), _logger);
                 
             }
 
@@ -113,10 +111,10 @@ public class UserService : IUserService
             {
 
                 Id = userId,
-                UserName = request.EMail,
+                UserName = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                Email = request.EMail,
+                Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 EmailConfirmed = request.EmailVerified,
                 CreatedOn = DateTime.UtcNow,
@@ -129,18 +127,18 @@ public class UserService : IUserService
 
             if (!result.Succeeded)
             {
-                _logger.LogError("Unable to create the User {0} / {1}. Check Error Log!", request.EMail,
+                _logger.LogError("Unable to create the User {0} / {1}. Check Error Log!", request.Email,
                     request.FirstName + " " + request.LastName);
                 foreach (var error in result.Errors)
-                    _logger.LogError("Error for User {0} - Code : {1}; Description : {2}", request.EMail,
+                    _logger.LogError("Error for User {0} - Code : {1}; Description : {2}", request.Email,
                         error.Code, error.Description);
                 return await ApiResponse<UserResponse>.FailAsync("E:" + "Sorry we have a failure. Please contact Support!", _logger);
             }
 
-            _logger.LogInformation("Attaching the user {0} to {1}!", request.EMail, request.Role);
+            _logger.LogInformation("Attaching the user {0} to {1}!", request.Email, request.Role);
             
              _ = await SendConfirmEMailCode(user);
-            _logger.LogInformation("User {0} created successfully!", request.EMail);
+            _logger.LogInformation("User {0} created successfully!", request.Email);
 
             var getUserById = await GetAsync(user.Id);
             var obj = _mapper.Map<ApplicationUser>(getUserById.Data);
@@ -151,8 +149,8 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "Registration Via email failed for user {0}", request.EMail);
-            return await ApiResponse<UserResponse>.FailAsync("E:Registration Via email failed for user " + request.EMail, _logger);
+            _logger.LogCritical(ex, "Registration Via email failed for user {0}", request.Email);
+            return await ApiResponse<UserResponse>.FailAsync("E:Registration Via email failed for user " + request.Email, _logger);
         }
     }
 

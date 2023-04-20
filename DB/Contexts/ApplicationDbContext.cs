@@ -139,6 +139,12 @@ public class ApplicationDbContext : AppIdentityDbContext
             entity.HasKey(e => new { e.OrganizationId, e.UserId });
         });
 
+        builder.Entity<OrganizationEmployee>(entity =>
+        {
+            entity.ToTable("OrganizationEmployee");
+            entity.HasKey(e => e.Id);
+        });
+
         #endregion
 
 

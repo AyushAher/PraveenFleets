@@ -11,10 +11,6 @@ public class OrganizationUserValidators:AbstractValidator<OrganizationUsers>
             .NotEmpty()
             .NotNull();
         
-        RuleFor(x => x.RoleId)
-            .NotEmpty()
-            .NotNull();
-
         RuleFor(x => x.UserId)
             .NotEmpty()
             .NotNull();
