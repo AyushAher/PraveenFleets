@@ -20,6 +20,7 @@ using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
 using Utility.Email;
+using Utility.Extensions;
 
 namespace ApplicationServices.Account;
 
@@ -100,6 +101,9 @@ public class UserService : IUserService
                 }
             }
 
+            // TODO Send Emails
+
+
             if (request.Password != request.ConfirmPassword)
             {
                 return await ApiResponse<UserResponse>.FailAsync("E: Password and confirm password does not match", _logger);
@@ -136,7 +140,7 @@ public class UserService : IUserService
             }
 
             _logger.LogInformation("Attaching the user {0} to {1}!", request.Email, request.Role);
-            
+
              _ = await SendConfirmEMailCode(user);
             _logger.LogInformation("User {0} created successfully!", request.Email);
 
@@ -979,6 +983,7 @@ public class UserService : IUserService
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", user.Email!),
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", user.FirstName),
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", user.LastName),
+                new("http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor", user.UserType.ToDescriptionString()),
             }.Union(userClaims)
             .Union(roleClaims)
             .Union(permissionClaims);
