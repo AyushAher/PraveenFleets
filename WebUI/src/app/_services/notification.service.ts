@@ -13,7 +13,7 @@ export class NotificationService {
     console.log(title, body);
   }
 
-  ShowError(body: string, title: string = "Error") {
+  ShowError(body: string | string[], title: string = "Error") {
     console.log(title, body);
   }
 

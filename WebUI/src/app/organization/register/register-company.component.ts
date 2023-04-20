@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import OrganizationService from '../_services/organization-service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterOrganizationRequest } from 'src/app/_requests/register-request';
 
 @Component({
@@ -16,7 +16,8 @@ export class RegisterCompanyComponent implements OnInit {
   constructor(
     _FormBuilder: FormBuilder,
     private organizationService: OrganizationService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.OrganizationForm = _FormBuilder.group({
       name: ["", [Validators.required, Validators.minLength(1), Validators.maxLength(200)]],
@@ -46,7 +47,6 @@ export class RegisterCompanyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   public get form() {
@@ -76,7 +76,7 @@ export class RegisterCompanyComponent implements OnInit {
     this.organizationService.Save(formData)
       .subscribe(data => {
         if (!data) return;
-        this.router.navigate(["dashboard"]);
+        this.router.navigate(["dashboard"], { relativeTo: this.activatedRoute.parent });
       })
   }
 

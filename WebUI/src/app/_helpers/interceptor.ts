@@ -52,7 +52,6 @@ export class ErrorInterceptor implements http.HttpInterceptor {
 @Injectable()
 export class ResponseInterceptor implements http.HttpInterceptor {
     constructor(
-        private userService: UserService,
         private notificationService: NotificationService,
     ) { }
 
@@ -60,9 +59,8 @@ export class ResponseInterceptor implements http.HttpInterceptor {
         return next.handle(request).pipe(
             tap((event: http.HttpEvent<ApiResponse<any>>) => {
                 if (event instanceof http.HttpResponse) {
-                    debugger;
                     // change the response body here
-                    if (event.body?.failed) this.notificationService.ShowError(event.body.messages[0]);
+                    if (event.body?.failed) this.notificationService.ShowError(event.body.messages);
                     var eve = event.clone({
                         body: event.body?.data
                     });

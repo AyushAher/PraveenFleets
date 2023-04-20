@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve -o --port 800",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "ag-grid-angular": "^29.2.0",
+    "ag-grid-community": "^29.2.0",
     "bootstrap": "^5.2.3",
     "google-libphonenumber": "^3.2.32",
     "guid-typescript": "^1.0.9",
