@@ -10,9 +10,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResponseInterceptor, ErrorInterceptor } from './_helpers/interceptor';
 import { JwtInterceptor } from './_helpers/jwtinterceptor';
-import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { SharedModule } from './shared/shared.module';
+import { HomeComponent } from './home/home.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
 @NgModule({
@@ -21,7 +23,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     LayoutComponent,
     NavBarComponent,
     SideNavBarComponent,
-    HomeComponent
+    HomeComponent,
+    NotFoundComponent
   ],
   imports: [
     HttpClientModule,
@@ -31,6 +34,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
+    SharedModule
   ],
   providers: [
     {
@@ -49,6 +53,6 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
       multi: true
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

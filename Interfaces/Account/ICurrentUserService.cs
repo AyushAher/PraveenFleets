@@ -1,4 +1,6 @@
-﻿namespace Interfaces.Account
+﻿using Enums.Account;
+
+namespace Interfaces.Account
 {
     public interface ICurrentUserService : IService
     {
@@ -11,6 +13,10 @@
         string FullName { get; }
 
         string Email { get; }
+
+        UserType UserType { get; }
+
+        Guid ParentEntityId { get; }
 
         List<string> UserRoles { get; }
     }

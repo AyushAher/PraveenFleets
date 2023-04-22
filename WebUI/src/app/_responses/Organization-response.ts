@@ -6,6 +6,8 @@ export default class OrganizationResponse {
     id: Guid;
     name: string;
     gstNumber: string;
-    addressDetails: AddressResponse;
+    address: AddressResponse;
     adminDetails: UserResponse;
+    addressId: Guid;
+    adminId: Guid;
 }

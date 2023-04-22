@@ -26,6 +26,7 @@ public class OrganizationService : IOrganizationService
     private readonly IOrganizationRolesService _organizationRolesService;
     private readonly IOrganizationUserService _organizationUserService;
     private readonly IOrganizationEmployeeService _organizationEmployeeService;
+    private readonly ICurrentUserService _currentUserService;
     
     private const string AdminRoleName = "Admin";
 
@@ -38,7 +39,8 @@ public class OrganizationService : IOrganizationService
         IUserService userService,
         IOrganizationRolesService organizationRolesService,
         IOrganizationUserService organizationUserService,
-        IOrganizationEmployeeService organizationEmployeeService
+        IOrganizationEmployeeService organizationEmployeeService,
+        ICurrentUserService currentUserService
     )
     {
         _mapper = mapper;
@@ -51,6 +53,7 @@ public class OrganizationService : IOrganizationService
         _organizationRolesService = organizationRolesService;
         _organizationUserService = organizationUserService;
         _organizationEmployeeService = organizationEmployeeService;
+        _currentUserService = currentUserService;
     }
 
 
@@ -126,10 +129,11 @@ public class OrganizationService : IOrganizationService
             // Commit transaction
             await _unitOfWork.Commit();
 
-            var orgRoleRequestObj = new CreateOrganizationRolesRequest()
+            var orgRoleRequestObj = new CreateOrganizationRolesRequest
             {
                 RoleName = AdminRoleName,
-                User = adminRegisterRequest.Data
+                User = adminRegisterRequest.Data,
+                OrganizationId = adminRegisterRequest.Data.ParentEntityId
             };
 
 
@@ -174,4 +178,35 @@ public class OrganizationService : IOrganizationService
             return await ApiResponse<OrganizationResponse>.FatalAsync(ex, _logger);
         }
     }
+
+    public async Task<ApiResponse<OrganizationResponse>> GetUserOrganizationDetails()
+    {
+        try
+        {
+            if (_currentUserService.UserType != UserType.Organization ||
+                _currentUserService.ParentEntityId == Guid.Empty)
+            {
+                return await ApiResponse<OrganizationResponse>.FailAsync("The User does not belong in any Organization",
+                    _logger);
+            }
+
+
+            var organizationCacheObject =
+                await _cache.GetFromCacheMemoryByIdAsync(new() { Id = _currentUserService.ParentEntityId });
+            if (organizationCacheObject != null)
+            {
+                var cacheResponseObj = _mapper.Map<OrganizationResponse>(organizationCacheObject);
+                return await ApiResponse<OrganizationResponse>.SuccessAsync(cacheResponseObj);
+            }
+
+            var organizationObject =  await _organizationsRepo.GetByIdAsync(_currentUserService.ParentEntityId);
+            var responseObj = _mapper.Map<OrganizationResponse>(organizationObject);
+            return await ApiResponse<OrganizationResponse>.SuccessAsync(responseObj);
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<OrganizationResponse>.FatalAsync(e, _logger);
+        }
+    }
+
 }

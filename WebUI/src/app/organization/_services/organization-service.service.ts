@@ -22,4 +22,15 @@ export default class OrganizationService {
             )
     }
 
+    GetUserOrganizationDetails() {
+        return this.http.get<ApiResponse<OrganizationResponse>>(`${environment.apiUrl}/Organization/GetUserOrganizationDetails`)
+            .pipe(
+                map((x: ApiResponse<OrganizationResponse>) => {
+                    if (x.failed) return new OrganizationResponse();
+                    if (!x.data) return new OrganizationResponse();
+                    return x.data;
+                })
+            )
+    }
+
 }

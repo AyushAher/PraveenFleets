@@ -9,15 +9,20 @@ import { JwtInterceptor } from '../_helpers/jwtinterceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 import { RegisterCompanyComponent } from './register/register-company.component';
 import { AgGridModule } from 'ag-grid-angular';
-import { EmployeeComponent } from './employee/employee.component';
+import { CreateEmployeeComponent } from './employee/create-employee.component';
+import { CreateRolesComponent } from './roles/create-roles.component';
+import { AppModule } from '../app.module';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [
     RegisterCompanyComponent,
-    EmployeeComponent
+    CreateEmployeeComponent,
+    CreateRolesComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +32,9 @@ import { EmployeeComponent } from './employee/employee.component';
     MatButtonModule,
     MatStepperModule,
     MatFormFieldModule,
-    AgGridModule
+    AgGridModule,
+    MatSelectModule,
+    SharedModule
 
   ],
 

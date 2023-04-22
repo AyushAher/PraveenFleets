@@ -4,7 +4,6 @@ using Shared.Configuration;
 
 namespace Utility.Email
 {
-    // TODO: Add email content
     public class MailGenerator : IMailGenerator
     {
         private readonly ILogger _logger;

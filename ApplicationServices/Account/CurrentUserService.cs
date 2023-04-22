@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using Enums.Account;
 using Interfaces.Account;
 using Microsoft.AspNetCore.Http;
+using Utility.Extensions;
 using static System.String;
 
 namespace ApplicationServices.Account;
@@ -23,6 +25,12 @@ public class CurrentUserService : ICurrentUserService
             FirstName = claimsPrincipal.FindFirstValue(ClaimTypes.Name);
             LastName = claimsPrincipal.FindFirstValue(ClaimTypes.Surname);
             Email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+            var userTypeVal = claimsPrincipal.FindFirstValue(ClaimTypes.Actor);
+            
+            if (!IsNullOrEmpty(userTypeVal)) UserType = (UserType)Enum.Parse(typeof(UserType), userTypeVal);
+
+            var parentEntityIdStr = claimsPrincipal.FindFirstValue(ClaimTypes.CookiePath);
+            if (!IsNullOrEmpty(parentEntityIdStr)) ParentEntityId = Guid.Parse(parentEntityIdStr);
         }
         else
         {
@@ -30,7 +38,7 @@ public class CurrentUserService : ICurrentUserService
             FirstName = Empty;
             LastName = Empty;
             Email = Empty;
-            CompanyId = Guid.Empty;
+            ParentEntityId = Guid.Empty;
         }
 
         // Get All Claims
@@ -46,8 +54,6 @@ public class CurrentUserService : ICurrentUserService
 
     public Guid UserId { get; }
 
-    public bool IsAdmin { get; } = false;
-
     public string FirstName { get; }
 
     public string LastName { get; }
@@ -55,8 +61,10 @@ public class CurrentUserService : ICurrentUserService
     public string FullName => $"{FirstName} {LastName}";
 
     public string Email { get; }
+    
+    public UserType UserType { get; }
 
-    public Guid? CompanyId { get; }
+    public Guid ParentEntityId { get; }
 
     public List<string>? UserRoles { get; }
 

@@ -58,13 +58,9 @@ internal static class ServiceCollectionExtensions
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appConfig.JwtSecurityKey)),
                     ValidateIssuerSigningKey = true,
                     RoleClaimType = ClaimTypes.Role,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = appConfig.JwtIssuer,
-                    ValidAudience = appConfig.JwtAudience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appConfig.JwtSecurityKey))
                 };
                 bearer.Events = new()
                 {

@@ -12,8 +12,6 @@ Log.Logger = new LoggerConfiguration().CreateLogger();
 
 Log.Information("Starting up");
 
-//Role => CEO, Normal, Organization Admin
-
 try
 {
     var loggerFactory = LoggerFactory
@@ -49,22 +47,22 @@ try
     builder.Services.Configure<ConnectionStrings>(connectionConfig);
     builder.Services.Configure<MailConfiguration>(configuration.GetSection(MailConfiguration.SectionLabel));
     builder.Services.Configure<AWSS3Config>(configuration.GetSection(AWSS3Config.Label));
-  
+
     builder.Services.AddHttpClient();
-    
+
     // Add Core Services and Repository
     builder.Services.RegisterParentAppLayer();
 
 
     //[AA] => For External services like Redis Caching, Azure File Storage, Email service
     builder.Services.RegisterParentUtilsServices(connectionConfig.Get<ConnectionStrings>());
-    
+
 
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    
+
     builder.Services.AddCors(options =>
     {
         options.AddDefaultPolicy(policy =>
@@ -78,14 +76,13 @@ try
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllers();

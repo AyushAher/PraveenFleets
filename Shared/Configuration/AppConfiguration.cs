@@ -12,11 +12,11 @@ public class AppConfiguration
 
     public string SupportMailAddress { get; set; } = string.Empty;
 
-    public string JwtSecurityKey { get; set; } = string.Empty;
+    public string JwtSecurityKey { get; set; }
 
-    public string JwtIssuer { get; set; } = string.Empty;
+    public string JwtIssuer { get; set; } 
 
-    public string JwtAudience { get; set; } = string.Empty;
+    public string JwtAudience { get; set; }
 
     public int JwtExpiryInHours { get; set; } = 6;
 

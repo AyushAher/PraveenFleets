@@ -9,7 +9,8 @@ services:
 
   RedisCache:
     image: redis
-
+    ports:
+      - 6379:6379
 
   webui:
     image: ayushaher118/praveen_fleets_webui

@@ -7,5 +7,7 @@ public class OrganizationResponse
     public string Name { get; set; }
     public string GstNumber { get; set; }
     public AddressResponse Address { get; set; }
-    public Guid AdminUserId { get; set; }
+    public Guid AdminId { get; set; }
+    public Guid Id { get; set; }
+    public Guid AddressId { get; set; }
 }

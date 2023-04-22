@@ -7,4 +7,5 @@ namespace Interfaces.Organizations;
 public interface IOrganizationService : IService
 {
     Task<ApiResponse<OrganizationResponse>> RegisterOrganization(RegisterOrganizationRequest registerOrganizationRequest);
+    Task<ApiResponse<OrganizationResponse>> GetUserOrganizationDetails();
 }

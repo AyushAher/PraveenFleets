@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Configuration;
+using Shared.Responses.Common;
 using StackExchange.Redis;
 using Utility.Email;
 
@@ -50,6 +51,17 @@ namespace Utility.Extensions
             return customAttributes == null || customAttributes.Length == 0
                 ? val.ToString()
                 : customAttributes[0].Description;
+        }
+
+        public static async Task<ApiResponse<List<EnumResponse>>> GetAllEnums<T>() where T : Enum
+        {
+            var lst = Enum.GetValues(typeof(T));
+
+            var lstGender =
+                (from T val in lst
+                    select new EnumResponse { Value = val, ValueDescription = val.ToDescriptionString() }).ToList();
+
+            return await ApiResponse<List<EnumResponse>>.SuccessAsync(lstGender);
         }
     }
 }

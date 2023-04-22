@@ -145,6 +145,12 @@ public class ApplicationDbContext : AppIdentityDbContext
             entity.HasKey(e => e.Id);
         });
 
+        builder.Entity<Vw_OrganizationRoles>(entity =>
+        {
+            entity.ToView("Vw_OrganizationRoles");
+            entity.HasKey(e => e.Id);
+        });
+
         #endregion
 
 

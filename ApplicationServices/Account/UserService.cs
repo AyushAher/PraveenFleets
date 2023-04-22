@@ -11,6 +11,7 @@ using DB.Extensions;
 using DnsClient;
 using Domain.Account;
 using Interfaces.Account;
+using Interfaces.Organizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
+using Shared.Responses.Organization;
 using Utility.Email;
 using Utility.Extensions;
 
@@ -36,7 +38,6 @@ public class UserService : IUserService
 
     private readonly IMailGenerator _mailGenerator;
     private readonly IEMailService _mailService;
-    private readonly IUnitOfWork<Guid> _unitOfWork;
 
     public UserService(
         ICacheConfiguration<ApplicationUser> cache,
@@ -47,9 +48,8 @@ public class UserService : IUserService
         RoleManager<ApplicationRole> roleManager,
         IOptions<AppConfiguration> appConfig,
         IMailGenerator mailGenerator,
-        IEMailService eMailService,
-        IUnitOfWork<Guid> unitOfWork
-        )
+        IEMailService eMailService
+    )
     {
         _roleManager = roleManager;
         _mailGenerator = mailGenerator;
@@ -61,7 +61,6 @@ public class UserService : IUserService
         _mailService = eMailService;
         _appConfig = appConfig.Value;
         _roleManager = roleManager;
-        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -983,7 +982,8 @@ public class UserService : IUserService
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", user.Email!),
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", user.FirstName),
                 new("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname", user.LastName),
-                new("http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor", user.UserType.ToDescriptionString()),
+                new("http://schemas.xmlsoap.org/ws/2009/09/identity/claims/actor", user.UserType.ToString()),
+                new("http://schemas.microsoft.com/ws/2008/06/identity/claims/cookiepath", user.ParentEntityId.ToString()),
             }.Union(userClaims)
             .Union(roleClaims)
             .Union(permissionClaims);

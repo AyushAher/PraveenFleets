@@ -76,7 +76,7 @@ export class RegisterCompanyComponent implements OnInit {
     this.organizationService.Save(formData)
       .subscribe(data => {
         if (!data) return;
-        this.router.navigate(["dashboard"], { relativeTo: this.activatedRoute.parent });
+        this.router.navigate(["/user","login"]);
       })
   }
 

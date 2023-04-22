@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using Amazon.Runtime.Internal;
+using AutoMapper;
 using DB.Extensions;
 using Domain.Account;
 using Domain.Organization;
@@ -16,22 +18,25 @@ public class OrganizationRoleService : IOrganizationRolesService
 {
     private readonly IMapper _mapper;
     private readonly ILogger<OrganizationRoleService> _logger;
-    private readonly ICacheConfiguration<ApplicationUser> _cache;
+    private readonly ICacheConfiguration<OrganizationRoles> _cache;
+    private readonly ICacheConfiguration<Vw_OrganizationRoles> _orgRoleCache;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IUnitOfWork<Guid> _unitOfWork;
     private readonly IRoleService _roleService;
+    private readonly IUserService _userService;
     private readonly IRepositoryAsync<OrganizationRoles, Guid> _organizationRolesRepo;
 
     public OrganizationRoleService(
-        ICacheConfiguration<ApplicationUser> cache,
+        ICacheConfiguration<OrganizationRoles> cache,
         IMapper mapper,
         ILogger<OrganizationRoleService> logger,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
         IUnitOfWork<Guid> unitOfWork,
-        IRoleService roleService
-    )
+        IRoleService roleService,
+        IUserService userService,
+        ICacheConfiguration<Vw_OrganizationRoles> orgRoleCache)
     {
         _roleManager = roleManager;
         _mapper = mapper;
@@ -42,14 +47,15 @@ public class OrganizationRoleService : IOrganizationRolesService
         _unitOfWork = unitOfWork;
         _roleService = roleService;
         _organizationRolesRepo = _unitOfWork.Repository<OrganizationRoles>();
+        _userService = userService;
+        _orgRoleCache = orgRoleCache;
     }
-    
+
     public async Task<ApiResponse<bool>> UpSertUserRole(CreateOrganizationRolesRequest request)
     {
         try
         {
             _ = await _unitOfWork.StartTransaction();
-            var user = await _userManager.FindByNameAsync(request.User.Email);
             
             // Check if role exists in org. as well as in roles
             if (!await _roleManager.RoleExistsAsync(request.RoleName))
@@ -66,7 +72,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                 {
                     await _unitOfWork.Rollback();
                     foreach (var error in result.Errors)
-                        _logger.LogError("Error for User {0} - Code : {1}; Description : {2}", user.Email,
+                        _logger.LogError("Error Code : {0}; Description : {1}",
                             error.Code, error.Description);
                     return await ApiResponse<bool>.FailAsync("E:" + "Sorry we have a failure. Please contact Support!",
                         _logger);
@@ -76,14 +82,14 @@ public class OrganizationRoleService : IOrganizationRolesService
             var roles = await _roleManager.FindByNameAsync(request.RoleName);
             var objExists = _organizationRolesRepo.Entities.Any(x =>
                                             x.RoleId == roles.Id && 
-                                            x.OrganizationId == user.ParentEntityId);
+                                            x.OrganizationId == request.OrganizationId);
 
             if (!objExists)
             {
                 var orgRole = new OrganizationRoles
                 {
                     Id = Guid.NewGuid(),
-                    OrganizationId = user.ParentEntityId,
+                    OrganizationId = request.OrganizationId,
                     RoleId = roles.Id
                 };
 
@@ -99,6 +105,15 @@ public class OrganizationRoleService : IOrganizationRolesService
                         _logger);
                 }
             }
+
+            if (request.User == null)
+            {
+                // Commit transaction
+                await _unitOfWork.Commit();
+                return await ApiResponse<bool>.SuccessAsync(true);
+            }
+
+            var user = await _userManager.FindByNameAsync(request.User.Email);
 
             // Assign role to user
             if (!(await _userManager.AddToRoleAsync(user, request.RoleName)).Succeeded)
@@ -123,6 +138,45 @@ public class OrganizationRoleService : IOrganizationRolesService
         }
     }
 
+    public async Task<ApiResponse<List<OrganizationRoleResponse>>> GetOrgRoles(Guid organizationId)
+    {
+        try
+        {
+            if (organizationId == Guid.Empty)
+            {
+                return await ApiResponse<List<OrganizationRoleResponse>>.FailAsync(
+                    "Some Error occurred, while querying for user role.", _logger);
+            }
+
+            var getFromCache =
+                await _cache.GetAllFromCacheMemoryAsync(new());
+
+            if (getFromCache is { Count: > 0 } && getFromCache.Count ==
+                _organizationRolesRepo.Entities.Count(x => x.OrganizationId == organizationId))
+            {
+                var cacheResponseMappedObj = _mapper.Map<List<OrganizationRoleResponse>>(getFromCache);
+                return await ApiResponse<List<OrganizationRoleResponse>>.SuccessAsync(cacheResponseMappedObj);
+            }
+
+            var queryRequest = new GetAllRoleQueryRequest
+            {
+                CheckOrganization = true,
+                ParamStr = organizationId.ToString()
+            };
+
+            var lst = await _unitOfWork.Repository<Vw_OrganizationRoles>().GetAllAsync(GetAllViewQuery(queryRequest));
+            lst.ForEach(x => _orgRoleCache.SetInCacheMemoryAsync(x));
+
+            var responseMappedObj = _mapper.Map<List<OrganizationRoleResponse>>(lst);
+
+            return await ApiResponse<List<OrganizationRoleResponse>>.SuccessAsync(responseMappedObj);
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<List<OrganizationRoleResponse>>.FatalAsync(e, _logger);
+        }
+    }
+
     public async Task<ApiResponse<OrganizationRoleResponse>> GetOrgRoleByUserId(Guid userId)
     {
         try
@@ -132,9 +186,29 @@ public class OrganizationRoleService : IOrganizationRolesService
                 return await ApiResponse<OrganizationRoleResponse>.FailAsync(
                     "Some Error occurred, while querying for user role.", _logger);
             }
-            
-            
-            
+
+            var user = await _userService.GetAsync(userId);
+            if (user.Failed)
+            {
+                return await ApiResponse<OrganizationRoleResponse>.FailAsync(user.Messages, _logger);
+            }
+            var userMapped = _mapper.Map<ApplicationUser>(user);
+
+            var userRoles = await _userManager.GetRolesAsync(userMapped);
+            if (userRoles.Count <= 0)
+            {
+                return await ApiResponse<OrganizationRoleResponse>.FailAsync("No Roles assigned for this user", _logger);
+            }
+
+            var fodRole = userRoles.FirstOrDefault();
+            if (fodRole == null)
+            {
+                return await ApiResponse<OrganizationRoleResponse>.FailAsync("No Roles assigned for this user", _logger);
+            }
+
+
+            var userRoleName = await _roleService.GetByName(fodRole);
+
 
 
             return await ApiResponse<OrganizationRoleResponse>.SuccessAsync();
@@ -143,5 +217,19 @@ public class OrganizationRoleService : IOrganizationRolesService
         {
             return await ApiResponse<OrganizationRoleResponse>.FatalAsync(e, _logger);
         }
+    }
+
+    private string GetAllViewQuery(GetAllRoleQueryRequest request)
+    {
+        var queryStr = new StringBuilder("(select * from `Vw_OrganizationRoles` where (`Vw_OrganizationRoles`.`DeletedBy` is null)");
+
+        if (request.CheckRole)
+            queryStr.Append($"and (`Vw_OrganizationRoles`.`RoleId`=\"{request.ParamStr}\" )");
+
+        else if (request.CheckOrganization)
+            queryStr.Append($"and (`Vw_OrganizationRoles`.`OrganizationId`=\"{request.ParamStr}\" )");
+
+        queryStr.Append(");");
+        return queryStr.ToString();
     }
 }
