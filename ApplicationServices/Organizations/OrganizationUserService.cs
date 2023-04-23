@@ -36,7 +36,7 @@ public class OrganizationUserService: IOrganizationUserService
     {
         try
         {
-
+            
             var doesExists = _orgUsersRepo.Entities.Any(x =>
                 x.UserId == request.UserId && x.OrganizationId == request.OrganizationId);
 
@@ -46,7 +46,8 @@ public class OrganizationUserService: IOrganizationUserService
             }
 
             var mappedObj = _mapper.Map<OrganizationUsers>(request);
-
+            mappedObj.Id = new Guid();
+            
             var validatorObj = new OrganizationUserValidators();
             var validationResult = await validatorObj.ValidateAsync(mappedObj);
             if (!validationResult.IsValid)

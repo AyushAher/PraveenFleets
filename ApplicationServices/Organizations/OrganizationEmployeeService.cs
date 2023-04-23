@@ -12,6 +12,7 @@ using Shared.Requests.Account;
 using Shared.Requests.Organization;
 using Shared.Responses.Account;
 using Shared.Responses.Organization;
+using Utility.Extensions;
 
 namespace ApplicationServices.Organizations;
 
@@ -83,7 +84,8 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
             }
 
             mappedRequestObj.AddressId = addressRequest.Data.Id;
-
+            mappedRequestObj.WeeklyOff =
+                string.Join(",", request.WeeklyOff.Select(x => x.ToDescriptionString()).ToList());
 
             var validationObj = new OrganizationEmployeeValidator();
             var result = await validationObj.ValidateAsync(mappedRequestObj);
@@ -121,10 +123,10 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
             
             _ = await _organizationUserService.AddUserToOrganization(orgUserReq);
             
-            // TODO: Map weekly off days
             var responseObj = _mapper.Map<OrganizationEmployeeResponse>(mappedRequestObj);
             responseObj.Address = addressRequest.Data;
             responseObj.User = employeeUser.Data;
+            
 
             return await ApiResponse<OrganizationEmployeeResponse>.SuccessAsync();
         }

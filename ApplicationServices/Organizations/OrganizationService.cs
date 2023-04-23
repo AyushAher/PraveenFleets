@@ -89,16 +89,7 @@ public class OrganizationService : IOrganizationService
             }
 
             registerOrganizationRequest.AddressRequest.ParentId = adminRegisterRequest.Data.Id;
-
-            var adminAddressRegisterRequest =
-                await _addressService.CreateAddress(registerOrganizationRequest.AddressRequest, true);
-
-            if (adminAddressRegisterRequest.Failed)
-            {
-                await _unitOfWork.Rollback();
-                return await ApiResponse<OrganizationResponse>.FailAsync(adminAddressRegisterRequest.Messages, _logger);
-            }
-
+            
             var organizationMappedObj = _mapper.Map<Domain.Organization.Organizations>(registerOrganizationRequest);
             organizationMappedObj.AddressId = addressRegisterRequest.Data.Id;
             organizationMappedObj.AdminId = adminRegisterRequest.Data.Id;
@@ -149,13 +140,14 @@ public class OrganizationService : IOrganizationService
 
             var employeeRequest =
                 _mapper.Map<OrganizationEmployeeRequest>(adminRegisterRequest.Data);
-            // TODO map from request
-            employeeRequest.Gender = Gender.Male;
-            employeeRequest.Salutation = Salutation.Mr;
-            employeeRequest.AddressRequest = registerOrganizationRequest.AddressRequest;
+            
+            employeeRequest.Gender = registerOrganizationRequest.AdminDetailsRequest.Gender;
+            employeeRequest.Salutation = registerOrganizationRequest.AdminDetailsRequest.Salutation;
+            employeeRequest.AddressRequest = registerOrganizationRequest.AdminDetailsRequest.Address;
             employeeRequest.OrganizationId = organizationMappedObj.Id;
             employeeRequest.UserId = adminRegisterRequest.Data.Id;
             employeeRequest.ContactNumber = adminRegisterRequest.Data.PhoneNumber;
+            employeeRequest.WeeklyOff = registerOrganizationRequest.AdminDetailsRequest.WeeklyOffs;
 
             // Add the new record in cache
             _cache.SetInCacheMemoryAsync(organizationMappedObj);

@@ -14,8 +14,8 @@ import { RegisterCompanyComponent } from './register/register-company.component'
 import { AgGridModule } from 'ag-grid-angular';
 import { CreateEmployeeComponent } from './employee/create-employee.component';
 import { CreateRolesComponent } from './roles/create-roles.component';
-import { AppModule } from '../app.module';
 import { SharedModule } from '../shared/shared.module';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -34,7 +34,8 @@ import { SharedModule } from '../shared/shared.module';
     MatFormFieldModule,
     AgGridModule,
     MatSelectModule,
-    SharedModule
+    SharedModule,
+    MatInputModule
 
   ],
 

@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from '../home/home.component';
 import { AddressComponent } from './address/address.component';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ResponseInterceptor, ErrorInterceptor } from '../_helpers/interceptor';
+import { JwtInterceptor } from '../_helpers/jwtinterceptor';
 
 
 
@@ -13,7 +16,28 @@ import { BrowserModule } from '@angular/platform-browser';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
+
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ResponseInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
   ],
   exports: [AddressComponent]
 })

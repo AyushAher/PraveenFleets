@@ -1,3 +1,4 @@
+import EnumResponse from "../_responses/enum-response";
 import { AddressRequest } from "./address-request";
 
 export class RegisterUserRequest {
@@ -9,6 +10,9 @@ export class RegisterUserRequest {
     phoneNumber: string;
     emailVerified: boolean;
     profilePictureUrl: string;
+    weeklyOffs: number[];
+  gender: any;
+  salutation: any;
 }
 
 

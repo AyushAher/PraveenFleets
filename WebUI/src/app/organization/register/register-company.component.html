@@ -1,5 +1,5 @@
 <div class="container">
-    <mat-stepper [linear]="true" #stepper>
+    <mat-stepper [linear]="false" #stepper>
         <mat-step [stepControl]="OrganizationForm" label="Organization Details">
             <form [formGroup]="OrganizationForm">
                 <div class="row my-3">
@@ -40,110 +40,17 @@
         </mat-step>
 
         <mat-step [stepControl]="AddressForm" label="Organization Address Details">
-            <form [formGroup]="AddressForm">
-                <div class="row my-3">
-                    <div class="col-md-6 my-3">
-                        <label for="addressLine1">Address Line 1<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Address Line 1"
-                            formControlName="addressLine1" name="addressLine1" id="addressLine1"
-                            [ngClass]="{'is-invalid':address.addressLine1.touched && address.addressLine1.errors}">
-
-                        <div *ngIf="address.addressLine1.touched && address.addressLine1.errors"
-                            class="invalid-feedback">
-                            <div *ngIf="address.addressLine1.errors.required" class="text-danger">
-                                Address Line 1 is required
-                            </div>
-                            <div *ngIf="address.addressLine1.errors.maxlength" class="text-danger">Max Length
-                                is 250
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 my-3">
-                        <label for="addressLine2">Address Line 2<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Address Line 2"
-                            formControlName="addressLine2" name="addressLine2" id="addressLine2"
-                            [ngClass]="{'is-invalid':address.addressLine2.touched && address.addressLine2.errors}">
-
-                        <div *ngIf="address.addressLine2.touched && address.addressLine2.errors"
-                            class="invalid-feedback">
-                            <div *ngIf="address.addressLine2.errors.required" class="text-danger">
-                                Address Line 2 is required
-                            </div>
-                            <div *ngIf="address.addressLine2.errors.maxlength" class="text-danger">Max Length
-                                is 250
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 my-3">
-                        <label for="state">State<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="State" formControlName="state" name="state"
-                            id="state" [ngClass]="{'is-invalid':address.state.touched && address.state.errors}">
-
-                        <div *ngIf="address.state.touched && address.state.errors" class="invalid-feedback">
-                            <div *ngIf="address.state.errors.required" class="text-danger">
-                                State is required
-                            </div>
-                            <div *ngIf="address.state.errors.maxlength" class="text-danger">Max Length
-                                is 100
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 my-3">
-                        <label for="city">City<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="City" formControlName="city" name="city"
-                            id="city" [ngClass]="{'is-invalid':address.city.touched && address.city.errors}">
-
-                        <div *ngIf="address.city.touched && address.city.errors" class="invalid-feedback">
-                            <div *ngIf="address.city.errors.required" class="text-danger">
-                                City is required
-                            </div>
-                            <div *ngIf="address.city.errors.maxlength" class="text-danger">Max Length
-                                is 100
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 my-3">
-                        <label for="country">Country<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Country" formControlName="country"
-                            name="country" id="country"
-                            [ngClass]="{'is-invalid':address.country.touched && address.country.errors}">
-
-                        <div *ngIf="address.country.touched && address.country.errors" class="invalid-feedback">
-                            <div *ngIf="address.country.errors.required" class="text-danger">
-                                Country is required
-                            </div>
-                            <div *ngIf="address.country.errors.maxlength" class="text-danger">Max Length
-                                is 100
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 my-3">
-                        <label for="pinCode">Pin Code<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Pin Code" formControlName="pinCode"
-                            name="pinCode" id="pinCode"
-                            [ngClass]="{'is-invalid':address.pinCode.touched && address.pinCode.errors}">
-
-                        <div *ngIf="address.pinCode.touched && address.pinCode.errors" class="invalid-feedback">
-                            <div *ngIf="address.pinCode.errors.required" class="text-danger">
-                                Pin Code is required
-                            </div>
-                            <div *ngIf="address.pinCode.errors.maxlength" class="text-danger">Max Length
-                                is 8
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <button mat-raised-button color="accent" class="me-2" matStepperPrevious>Back</button>
-                    <button mat-raised-button color="primary" matStepperNext>Next</button>
-                </div>
-            </form>
+            <shared-address [IsAdmin]="true" [(AddressForm)]="AddressForm"></shared-address>
+            <div>
+                <button mat-raised-button color="accent" class="me-2" matStepperPrevious>Back</button>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+            </div>
         </mat-step>
 
         <mat-step [stepControl]="AdminDetailsForm" label="Organization Admin Details">
             <form [formGroup]="AdminDetailsForm">
-                <!-- TODO: when form value changes in the component patch value on `AdminDetailsForm` form -->
-                <organization-create-employee [IsAdmin]="true"></organization-create-employee>
+                <organization-create-employee [(EmployeeForm)]="AdminDetailsForm"
+                    [IsAdmin]="true"></organization-create-employee>
                 <div>
                     <button mat-raised-button color="accent" class="me-2" matStepperPrevious>Back</button>
                     <button mat-raised-button color="primary" (click)="OnSubmit()">Submit</button>

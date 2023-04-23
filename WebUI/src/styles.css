@@ -49,3 +49,7 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+h3 {
+  font-size: 25px !important;
+}

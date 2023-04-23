@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="EmployeeDetailsForm">
+    <form [formGroup]="EmployeeForm">
         <div class="row my-3">
             <div class="col-md-2 my-3">
                 <label for="salutation">Salutation<span class="text-danger">*</span></label>
@@ -92,21 +92,41 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
-                <label for="role">Role<span class="text-danger">*</span></label>
-                <select type="text" class="form-select" placeholder="Enter your First Name" formControlName="role"
-                    name="role" id="role" [ngClass]="{'is-invalid':employee.role.touched && employee.role.errors}">
+            <div class="col-md-2" *ngIf="!IsAdmin">
+                <label for="roleId">Role<span class="text-danger">*</span></label>
+                <select type="text" class="form-select" formControlName="roleId" name="roleId" id="roleId"
+                    [ngClass]="{'is-invalid':employee.roleId.touched && employee.roleId.errors}">
                     <option *ngFor="let i of RoleList" [value]="i.roleId">{{i.roleName}}</option>
                 </select>
-                <div *ngIf="employee.role.touched && employee.role.errors" class="invalid-feedback">
-                    <div *ngIf="employee.role.errors.required" class="text-danger">
-                        Role is required
+                <div *ngIf="employee.roleId.touched && employee.roleId.errors" class="invalid-feedback">
+                    <div *ngIf="employee.roleId.errors.required" class="text-danger">
+                        roleId is required
                     </div>
                 </div>
             </div>
+            <div class="col-md-4 my-2">
+                <mat-form-field appearance="fill" floatLabel="auto">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Password" type="password" formControlName="password"
+                        [ngClass]="{'is-invalid':employee.password.touched && employee.password.errors}" name="password"
+                        id="password" required>
+                    <mat-error *ngIf="employee.password.errors?.required">Password is required</mat-error>
 
-            <div class="col-md-5 mt-2">
-                <mat-form-field class="w-100" appearance="fill">
+                </mat-form-field>
+            </div>
+            <div class="col-md-4 my-2">
+                <mat-form-field appearance="fill" floatLabel="auto">
+                    <mat-label>Confirm Password</mat-label>
+                    <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword"
+                        [ngClass]="{'is-invalid':employee.confirmPassword.touched && employee.confirmPassword.errors}"
+                        name="confirmPassword" id="confirmPassword" required>
+                    <mat-error *ngIf="employee.confirmPassword.errors?.required">
+                        Confirm Password is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4 my-2">
+                <mat-form-field class="w-100" appearance="fill" floatLabel="auto">
                     <mat-label>Weekly Offs</mat-label>
                     <mat-select [formControl]="weeklyOffsControl" multiple>
                         <mat-option *ngFor="let weekDay of WeekDaysList"
@@ -117,6 +137,9 @@
             </div>
 
         </div>
+
+        <shared-address [(AddressForm)]="AddressForm"></shared-address>
+
         <div *ngIf="!IsAdmin">
             <button mat-raised-button color="primary" (click)="OnSubmit()">Submit</button>
         </div>

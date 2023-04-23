@@ -1,1 +1,65 @@
-<p>address works!</p>
+<div class="header" *ngIf="!IsAdmin">
+    <h3>Address</h3>
+    <hr>
+</div>
+<form [formGroup]="AddressForm">
+    <div class="row mt-3">
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>Address Line 1</mat-label>
+                <input matInput placeholder="Flat No., Building..." formControlName="addressLine1"
+                    [ngClass]="{'is-invalid':address.addressLine1.touched && address.addressLine1.errors}"
+                    name="addressLine1" id="addressLine1" required>
+                <mat-error *ngIf="address.addressLine1.errors?.required">Address Line 1 is required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>Address Line 2</mat-label>
+                <input matInput placeholder="Area, Landmark..." formControlName="addressLine2"
+                    [ngClass]="{'is-invalid':address.addressLine2.touched && address.addressLine2.errors}"
+                    name="addressLine2" id="addressLine2" required>
+                <mat-error *ngIf="address.addressLine2.errors?.required">Address Line 2 is required</mat-error>
+
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>City</mat-label>
+                <input matInput placeholder="e.g. Mumbai" formControlName="city"
+                    [ngClass]="{'is-invalid':address.city.touched && address.city.errors}" name="city" id="city"
+                    required>
+                <mat-error *ngIf="address.city.errors?.required">City is required</mat-error>
+
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>State</mat-label>
+                <input matInput placeholder="e.g. Maharashtra" formControlName="state"
+                    [ngClass]="{'is-invalid':address.state.touched && address.state.errors}" name="state" id="state"
+                    required>
+                <mat-error *ngIf="address.state.errors?.required">State is required</mat-error>
+
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>Country</mat-label>
+                <input matInput placeholder="e.g. India" formControlName="country"
+                    [ngClass]="{'is-invalid':address.country.touched && address.country.errors}" name="country"
+                    id="country" required>
+                <mat-error *ngIf="address.country.errors?.required">Country is required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-4 my-3">
+            <mat-form-field appearance="fill" [floatLabel]="getFloatLabelValue()">
+                <mat-label>Pin Code</mat-label>
+                <input matInput placeholder="e.g. 110001" formControlName="pinCode"
+                    [ngClass]="{'is-invalid':address.pinCode.touched && address.pinCode.errors}" name="pinCode"
+                    id="pinCode" required>
+                <mat-error *ngIf="address.pinCode.errors?.required">Pin Code is required</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+</form>

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Enums.Account;
+using Enums.Employee;
+using Shared.Requests.Common;
 
 namespace Shared.Requests.Account
 {
@@ -43,5 +45,13 @@ namespace Shared.Requests.Account
         public string Role { get; set; } = string.Empty;
 
         public UserType UserType { get; set; }
+
+        public Gender Gender { get; set; }
+        
+        public Salutation Salutation { get; set; }
+        
+        public List<WeekDays> WeeklyOffs { get; set; }
+
+        public AddressRequest Address { get; set; }
     }
 }

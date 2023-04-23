@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import OrganizationService from '../_services/organization-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterOrganizationRequest } from 'src/app/_requests/register-request';
+import { AddressRequest } from 'src/app/_requests/address-request';
 
 @Component({
   selector: 'app-register',
@@ -16,8 +17,7 @@ export class RegisterCompanyComponent implements OnInit {
   constructor(
     _FormBuilder: FormBuilder,
     private organizationService: OrganizationService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private router: Router
   ) {
     this.OrganizationForm = _FormBuilder.group({
       name: ["", [Validators.required, Validators.minLength(1), Validators.maxLength(200)]],
@@ -36,11 +36,14 @@ export class RegisterCompanyComponent implements OnInit {
     this.AdminDetailsForm = _FormBuilder.group({
       firstName: ["", [Validators.required, Validators.maxLength(60), Validators.minLength(1)]],
       lastName: ["", [Validators.required, Validators.maxLength(60), Validators.minLength(1)]],
-      eMail: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]],
+      email: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]],
       phoneNumber: ["", [Validators.required]],
       password: ["", [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
       confirmPassword: ["", [Validators.required, Validators.minLength(6), Validators.maxLength(20)]],
-      role: [""]
+      gender: ["", Validators.required],
+      salutation: ["", Validators.required],
+      weeklyOffs: ["", Validators.required],
+      address: []
     })
 
 
@@ -53,30 +56,27 @@ export class RegisterCompanyComponent implements OnInit {
     return this.OrganizationForm.controls;
   }
 
-  public get address() {
-    return this.AddressForm.controls;
-  }
-
-  public get admin() {
-    return this.AdminDetailsForm.controls;
-  }
-
   OnSubmit() {
     this.OrganizationForm.markAllAsTouched();
     this.AdminDetailsForm.markAllAsTouched();
     this.AddressForm.markAllAsTouched();
 
-    if (this.OrganizationForm.invalid || this.AdminDetailsForm.invalid || this.AddressForm.invalid)
+    if (this.OrganizationForm.invalid ||
+      this.AdminDetailsForm.invalid ||
+      this.AddressForm.invalid)
       return;
 
     var formData: RegisterOrganizationRequest = this.OrganizationForm.value;
     formData.addressRequest = this.AddressForm.value;
     formData.adminDetailsRequest = this.AdminDetailsForm.value;
+    formData.adminDetailsRequest.gender = Number.parseInt(formData.adminDetailsRequest.gender)
+    formData.adminDetailsRequest.salutation = Number.parseInt(formData.adminDetailsRequest.salutation)
+
 
     this.organizationService.Save(formData)
       .subscribe(data => {
         if (!data) return;
-        this.router.navigate(["/user","login"]);
+        this.router.navigate(["/user", "login"]);
       })
   }
 
