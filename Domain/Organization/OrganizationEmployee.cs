@@ -11,7 +11,7 @@ public class OrganizationEmployee: EntityTemplate<Guid>
     public string LastName { get; set; }
     public string Email { get; set; }
     public Gender Gender { get; set; }
-    public string ContactNumber { get; set; }
+    public string PhoneNumber { get; set; }
     
     //List of Weekdays Enum converted to string
     public string WeeklyOff { get; set; }

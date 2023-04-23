@@ -1,4 +1,5 @@
 using Enums.Account;
+using Enums.Employee;
 
 namespace Shared.Responses.Account;
 
@@ -53,4 +54,9 @@ public class UserResponse
 
     public UserType UserType { get; set; }
 
+    public Salutation Salutation { get; set; }
+
+    public List<WeekDays> WeeklyOff { get; set; } = new();
+
+    public Gender Gender { get; set; }
 }

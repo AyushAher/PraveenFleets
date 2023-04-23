@@ -7,6 +7,7 @@ import OrganizationRoleService from '../_services/organization-role.service';
 import { UserService } from 'src/app/user/_services/user-service.service';
 import { UserResponse } from 'src/app/_responses/user-response';
 import OrganizationRoleResponse from 'src/app/_responses/organization-role-response';
+import OrganizationEmployeeService from '../_services/organization-employee.service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class CreateEmployeeComponent implements OnInit {
     _FormBuilder: FormBuilder,
     private enumService: EnumService,
     private organizationRoleService: OrganizationRoleService,
-    private userService: UserService
+    private userService: UserService,
+    private organizationEmployeeService: OrganizationEmployeeService
   ) {
     this.EmployeeForm = _FormBuilder.group({
       firstName: ["", [Validators.required, Validators.maxLength(60), Validators.minLength(1)]],
@@ -57,11 +59,10 @@ export class CreateEmployeeComponent implements OnInit {
       pinCode: ["", [Validators.required, Validators.maxLength(8)]],
     });
 
-    if (this.IsAdmin) {
-      this.EmployeeForm.get("roleId")?.setValidators([Validators.required])
-      this.EmployeeForm.get("password")?.valueChanges
-        .subscribe(value => this.EmployeeForm.get("confirmPassword")?.setValue(value))
-    }
+    if (this.IsAdmin) this.EmployeeForm.get("roleId")?.setValidators([Validators.required])
+
+    else this.EmployeeForm.get("password")?.valueChanges
+      .subscribe(value => this.EmployeeForm.get("confirmPassword")?.setValue(value))
 
 
     this.weeklyOffsControl.valueChanges
@@ -100,9 +101,12 @@ export class CreateEmployeeComponent implements OnInit {
 
   OnSubmit() {
     let formData = this.EmployeeForm.getRawValue();
-    formData.adminDetailsRequest.gender = Number.parseInt(formData.adminDetailsRequest.gender)
-    formData.adminDetailsRequest.salutation = Number.parseInt(formData.adminDetailsRequest.salutation)
+    formData.gender = Number.parseInt(formData.gender)
+    formData.salutation = Number.parseInt(formData.salutation)
     console.log(formData);
+
+    this.organizationEmployeeService.RegisterEmployee(formData)
+      .subscribe()
 
   }
 }

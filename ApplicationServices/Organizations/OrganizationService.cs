@@ -2,7 +2,6 @@
 using AutoMapper;
 using DB.Extensions;
 using Enums.Account;
-using Enums.Employee;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.Organizations;
@@ -27,7 +26,7 @@ public class OrganizationService : IOrganizationService
     private readonly IOrganizationUserService _organizationUserService;
     private readonly IOrganizationEmployeeService _organizationEmployeeService;
     private readonly ICurrentUserService _currentUserService;
-    
+
     private const string AdminRoleName = "Admin";
 
     public OrganizationService(
@@ -48,7 +47,7 @@ public class OrganizationService : IOrganizationService
         _unitOfWork = unitOfWork;
         _organizationsRepo = unitOfWork.Repository<Domain.Organization.Organizations>();
         _cache = cache;
-        _addressService  = addressService;
+        _addressService = addressService;
         _userService = userService;
         _organizationRolesService = organizationRolesService;
         _organizationUserService = organizationUserService;
@@ -67,7 +66,7 @@ public class OrganizationService : IOrganizationService
             registerOrganizationRequest.AdminDetailsRequest.ParentEntityId = registerOrganizationRequest.Id;
             registerOrganizationRequest.AdminDetailsRequest.UserType = UserType.Organization;
             registerOrganizationRequest.AdminDetailsRequest.Role = AdminRoleName;
-            
+
             _ = await _unitOfWork.StartTransaction();
 
 
@@ -89,7 +88,7 @@ public class OrganizationService : IOrganizationService
             }
 
             registerOrganizationRequest.AddressRequest.ParentId = adminRegisterRequest.Data.Id;
-            
+
             var organizationMappedObj = _mapper.Map<Domain.Organization.Organizations>(registerOrganizationRequest);
             organizationMappedObj.AddressId = addressRegisterRequest.Data.Id;
             organizationMappedObj.AdminId = adminRegisterRequest.Data.Id;
@@ -140,20 +139,20 @@ public class OrganizationService : IOrganizationService
 
             var employeeRequest =
                 _mapper.Map<OrganizationEmployeeRequest>(adminRegisterRequest.Data);
-            
+
             employeeRequest.Gender = registerOrganizationRequest.AdminDetailsRequest.Gender;
             employeeRequest.Salutation = registerOrganizationRequest.AdminDetailsRequest.Salutation;
-            employeeRequest.AddressRequest = registerOrganizationRequest.AdminDetailsRequest.Address;
-            employeeRequest.OrganizationId = organizationMappedObj.Id;
+            employeeRequest.Address = registerOrganizationRequest.AdminDetailsRequest.Address;
+            employeeRequest.ParentEntityId = organizationMappedObj.Id;
             employeeRequest.UserId = adminRegisterRequest.Data.Id;
-            employeeRequest.ContactNumber = adminRegisterRequest.Data.PhoneNumber;
-            employeeRequest.WeeklyOff = registerOrganizationRequest.AdminDetailsRequest.WeeklyOffs;
+            employeeRequest.PhoneNumber = adminRegisterRequest.Data.PhoneNumber;
+            employeeRequest.WeeklyOffs = registerOrganizationRequest.AdminDetailsRequest.WeeklyOffs;
 
             // Add the new record in cache
             _cache.SetInCacheMemoryAsync(organizationMappedObj);
 
             var employee = await _organizationEmployeeService.SaveOrganizationEmployee(employeeRequest);
-            
+
             if (employee.Failed)
             {
                 return await ApiResponse<OrganizationResponse>.FailAsync(employee.Messages, _logger);
@@ -191,7 +190,7 @@ public class OrganizationService : IOrganizationService
                 return await ApiResponse<OrganizationResponse>.SuccessAsync(cacheResponseObj);
             }
 
-            var organizationObject =  await _organizationsRepo.GetByIdAsync(_currentUserService.ParentEntityId);
+            var organizationObject = await _organizationsRepo.GetByIdAsync(_currentUserService.ParentEntityId);
             var responseObj = _mapper.Map<OrganizationResponse>(organizationObject);
             return await ApiResponse<OrganizationResponse>.SuccessAsync(responseObj);
         }

@@ -2,7 +2,6 @@
 using Enums.Account;
 using Interfaces.Account;
 using Microsoft.AspNetCore.Http;
-using Utility.Extensions;
 using static System.String;
 
 namespace ApplicationServices.Account;

@@ -1,4 +1,5 @@
-﻿using ApplicationServices.MappingProfile.Organizations;
+﻿using ApplicationServices.Account;
+using ApplicationServices.MappingProfile.Organizations;
 using AutoMapper;
 using DB.Extensions;
 using Domain.Organization;
@@ -27,6 +28,7 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IOrganizationUserService _organizationUserService;
+    private readonly ICurrentUserService _currentUserService;
 
     public OrganizationEmployeeService(
         IMapper mapper,
@@ -35,7 +37,8 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
         ICacheConfiguration<OrganizationEmployee> cache,
         IAddressService addressService,
         IUserService userService,
-        IOrganizationUserService organizationUserService
+        IOrganizationUserService organizationUserService,
+        ICurrentUserService currentUserService
     )
     {
         _mapper = mapper;
@@ -46,6 +49,7 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
         _addressService = addressService;
         _userService = userService;
         _organizationUserService = organizationUserService;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ApiResponse<OrganizationEmployeeResponse>> SaveOrganizationEmployee(OrganizationEmployeeRequest request)
@@ -57,7 +61,14 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
             _ = await _unitOfWork.StartTransaction();
             userMappedRequest.UserType = UserType.Organization;
-            userMappedRequest.ParentEntityId = request.OrganizationId;
+
+            userMappedRequest.ParentEntityId = request.ParentEntityId == Guid.Empty
+                ? _currentUserService.ParentEntityId
+                : request.ParentEntityId;
+
+            mappedRequestObj.OrganizationId = request.ParentEntityId == Guid.Empty
+                ? _currentUserService.ParentEntityId
+                : request.ParentEntityId;
 
             ApiResponse<UserResponse> employeeUser;
 
@@ -74,9 +85,9 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
 
             mappedRequestObj.UserId = employeeUser.Data.Id;
-            request.AddressRequest.ParentId = employeeUser.Data.Id;
+            request.Address.ParentId = employeeUser.Data.Id;
 
-            var addressRequest = await _addressService.CreateAddress(request.AddressRequest, true);
+            var addressRequest = await _addressService.CreateAddress(request.Address, true);
             if (addressRequest.Failed)
             {
                 await _unitOfWork.Rollback();
@@ -85,7 +96,7 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
             mappedRequestObj.AddressId = addressRequest.Data.Id;
             mappedRequestObj.WeeklyOff =
-                string.Join(",", request.WeeklyOff.Select(x => x.ToDescriptionString()).ToList());
+                string.Join(",", request.WeeklyOffs.Select(x => x.ToDescriptionString()).ToList());
 
             var validationObj = new OrganizationEmployeeValidator();
             var result = await validationObj.ValidateAsync(mappedRequestObj);
@@ -117,15 +128,11 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
             var orgUserReq = new RegisterOrganizationUserRequest
             {
-                OrganizationId = request.OrganizationId,
+                OrganizationId = request.ParentEntityId,
                 UserId = employeeUser.Data.Id,
             };
             
             _ = await _organizationUserService.AddUserToOrganization(orgUserReq);
-            
-            var responseObj = _mapper.Map<OrganizationEmployeeResponse>(mappedRequestObj);
-            responseObj.Address = addressRequest.Data;
-            responseObj.User = employeeUser.Data;
             
 
             return await ApiResponse<OrganizationEmployeeResponse>.SuccessAsync();

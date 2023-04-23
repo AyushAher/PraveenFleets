@@ -7,11 +7,9 @@ using System.Security.Cryptography;
 using System.Text;
 using ApplicationServices.MappingProfile.Account;
 using AutoMapper;
-using DB.Extensions;
 using DnsClient;
 using Domain.Account;
 using Interfaces.Account;
-using Interfaces.Organizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
@@ -20,9 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
-using Shared.Responses.Organization;
 using Utility.Email;
-using Utility.Extensions;
 
 namespace ApplicationServices.Account;
 
