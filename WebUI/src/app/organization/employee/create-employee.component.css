@@ -2,6 +2,6 @@
     font-size: 12px;
 }
 
-.col-md-4>* {
+.row>div>* {
     width: 100%;
 }

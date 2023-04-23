@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 my-2">
+            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
                 <mat-form-field appearance="fill" floatLabel="auto">
                     <mat-label>Password</mat-label>
                     <input matInput placeholder="Password" type="password" formControlName="password"
@@ -114,7 +114,7 @@
 
                 </mat-form-field>
             </div>
-            <div class="col-md-4 my-2">
+            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}" *ngIf="IsAdmin">
                 <mat-form-field appearance="fill" floatLabel="auto">
                     <mat-label>Confirm Password</mat-label>
                     <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword"
@@ -125,7 +125,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-            <div class="col-md-4 my-2">
+            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
                 <mat-form-field class="w-100" appearance="fill" floatLabel="auto">
                     <mat-label>Weekly Offs</mat-label>
                     <mat-select [formControl]="weeklyOffsControl" multiple>

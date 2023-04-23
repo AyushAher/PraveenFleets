@@ -57,8 +57,12 @@ export class CreateEmployeeComponent implements OnInit {
       pinCode: ["", [Validators.required, Validators.maxLength(8)]],
     });
 
-    if (this.IsAdmin)
+    if (this.IsAdmin) {
       this.EmployeeForm.get("roleId")?.setValidators([Validators.required])
+      this.EmployeeForm.get("password")?.valueChanges
+        .subscribe(value => this.EmployeeForm.get("confirmPassword")?.setValue(value))
+    }
+
 
     this.weeklyOffsControl.valueChanges
       .subscribe(value => this.employee.weeklyOffs.setValue(value))
