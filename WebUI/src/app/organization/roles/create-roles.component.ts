@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import OrganizationService from '../_services/organization-service.service';
 import OrganizationResponse from 'src/app/_responses/Organization-response';
+import OrganizationRoleService from '../_services/organization-role.service';
 
 @Component({
   selector: 'app-roles',
@@ -13,7 +14,8 @@ export class CreateRolesComponent implements OnInit {
 
   constructor(
     _formBuilder: FormBuilder,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    private organizationRoleService: OrganizationRoleService
   ) {
     this.Form = _formBuilder.group({
       organization: ["", Validators.required],
@@ -22,17 +24,18 @@ export class CreateRolesComponent implements OnInit {
     })
 
     organizationService.GetUserOrganizationDetails()
-      .subscribe(data => this.Organization = data)
+      .subscribe(data => {
+        this.Organization = data
+        if (data.name) {
+          this.Form.get("organization")?.setValue(data.name)
+          this.Form.get("organization")?.disable()
+          this.Form.get("organizationId")?.setValue(data.id)
+        }
+      })
 
   }
 
   ngOnInit(): void {
-
-    if (this.Organization.name) {
-      this.Form.get("organization")?.setValue(this.Organization.name)
-      this.Form.get("organizationId")?.setValue(this.Organization.id)
-
-    }
 
 
   }
@@ -40,5 +43,13 @@ export class CreateRolesComponent implements OnInit {
   get f() {
     return this.Form.controls;
   }
+
+  OnSubmit() {
+    this.organizationRoleService._object = this.Form.getRawValue()
+    this.organizationRoleService.SaveRole()
+      .subscribe()
+  }
+
+
 
 }

@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="Form">
+    <form [formGroup]="Form" (ngSubmit)="OnSubmit()">
         <div class="row my-3">
             <div class="col-md-6 my-3">
                 <label for="organization">Organization<span class="text-danger">*</span></label>
