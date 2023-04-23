@@ -32,9 +32,11 @@ public class OrganizationEmployeeRequest
     [Required]
     public string RoleId { get; set; }
     
-    //List of Weekdays Enum converted to string
     public List<WeekDays> WeeklyOff { get; set; } = new();
+    
     public Guid OrganizationId { get; set; }
+    
     public AddressRequest AddressRequest { get; set; }
+    
     public Guid UserId { get; set; }
 }
