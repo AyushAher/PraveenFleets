@@ -151,6 +151,12 @@ public class ApplicationDbContext : AppIdentityDbContext
             entity.HasKey(e => e.Id);
         });
 
+        builder.Entity<Vw_OrganizationEmployee>(entity =>
+        {
+            entity.ToView("Vw_OrganizationEmployee");
+            entity.HasKey(e => e.Id);
+        });
+
         #endregion
 
 

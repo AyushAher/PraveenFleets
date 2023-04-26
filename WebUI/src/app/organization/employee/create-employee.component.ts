@@ -8,6 +8,7 @@ import { UserService } from 'src/app/user/_services/user-service.service';
 import { UserResponse } from 'src/app/_responses/user-response';
 import OrganizationRoleResponse from 'src/app/_responses/organization-role-response';
 import OrganizationEmployeeService from '../_services/organization-employee.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class CreateEmployeeComponent implements OnInit {
     private enumService: EnumService,
     private organizationRoleService: OrganizationRoleService,
     private userService: UserService,
-    private organizationEmployeeService: OrganizationEmployeeService
+    private organizationEmployeeService: OrganizationEmployeeService,
+    private router: Router
   ) {
     this.EmployeeForm = _FormBuilder.group({
       firstName: ["", [Validators.required, Validators.maxLength(60), Validators.minLength(1)]],
@@ -103,10 +105,11 @@ export class CreateEmployeeComponent implements OnInit {
     let formData = this.EmployeeForm.getRawValue();
     formData.gender = Number.parseInt(formData.gender)
     formData.salutation = Number.parseInt(formData.salutation)
-    console.log(formData);
 
     this.organizationEmployeeService.RegisterEmployee(formData)
-      .subscribe()
+      .subscribe(_ => {
+        this.router.navigate(['/organization', 'Employee'])
+      })
 
   }
 }

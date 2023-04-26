@@ -23,4 +23,9 @@ public class OrganizationEmployeeController : ControllerBase
     public async Task<ApiResponse<OrganizationEmployeeResponse>> RegisterEmployee(OrganizationEmployeeRequest request)
         => await _organizationEmployeeService.SaveOrganizationEmployee(request);
 
+
+    [HttpGet("GetAllOrganizationEmployees")]
+    public async Task<ApiResponse<List<OrganizationEmployeeResponse>>> GetAllOrganizationEmployees()
+        => await _organizationEmployeeService.GetAllEmpolyees();
+
 }

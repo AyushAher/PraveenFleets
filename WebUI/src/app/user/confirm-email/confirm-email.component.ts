@@ -22,7 +22,6 @@ export class ConfirmEmailComponent implements OnInit {
   ngOnInit(): void {
     let emailId = this.activeRoute.snapshot.queryParamMap.get("useremail");
     let token = this.activeRoute.snapshot.queryParamMap.get("token");
-    console.log(this.activeRoute.snapshot);
 
     if (emailId == null || token == null) {
       this.DisplayMessage = "Invalid URL.";

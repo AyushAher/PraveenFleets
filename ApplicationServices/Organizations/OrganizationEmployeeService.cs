@@ -7,6 +7,8 @@ using Enums.Account;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.Organizations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Account;
@@ -24,21 +26,27 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
     private readonly IUnitOfWork<Guid> _unitOfWork;
     private readonly IRepositoryAsync<OrganizationEmployee, Guid> _organizationEmployeeRepo;
     private readonly ICacheConfiguration<OrganizationEmployee> _cache;
+    private readonly ICacheConfiguration<Vw_OrganizationEmployee> _vwOrgEmployeeCache;
     private readonly IAddressService _addressService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IOrganizationUserService _organizationUserService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IOrganizationRolesService _organizationRolesService;
+    private readonly IRoleService _roleService;
 
     public OrganizationEmployeeService(
         IMapper mapper,
         ILogger<OrganizationService> logger,
         IUnitOfWork<Guid> unitOfWork,
         ICacheConfiguration<OrganizationEmployee> cache,
+        ICacheConfiguration<Vw_OrganizationEmployee> vwOrgEmployeeCache,
         IAddressService addressService,
         IUserService userService,
         IOrganizationUserService organizationUserService,
-        ICurrentUserService currentUserService
+        ICurrentUserService currentUserService,
+        IOrganizationRolesService organizationRolesService,
+        IRoleService roleService
     )
     {
         _mapper = mapper;
@@ -50,6 +58,10 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
         _userService = userService;
         _organizationUserService = organizationUserService;
         _currentUserService = currentUserService;
+        _vwOrgEmployeeCache = vwOrgEmployeeCache;
+        _organizationRolesService = organizationRolesService;
+        _roleService = roleService;
+
     }
 
     public async Task<ApiResponse<OrganizationEmployeeResponse>> SaveOrganizationEmployee(OrganizationEmployeeRequest request)
@@ -128,12 +140,23 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
             var orgUserReq = new RegisterOrganizationUserRequest
             {
-                OrganizationId = request.ParentEntityId,
+                OrganizationId = userMappedRequest.ParentEntityId,
                 UserId = employeeUser.Data.Id,
             };
-            
-            _ = await _organizationUserService.AddUserToOrganization(orgUserReq);
-            
+
+            var roleName = await _roleService.GetByIdAsync(request.RoleId);
+
+            var userOrg = await _organizationUserService.AddUserToOrganization(orgUserReq);
+            if (!roleName.Failed && roleName.Data != null)
+            {
+                var requestRole = new CreateOrganizationRolesRequest()
+                {
+                    OrganizationId = userMappedRequest.ParentEntityId,
+                    User = employeeUser.Data,
+                    RoleName = roleName.Data.Name
+                };
+                var x = await _organizationRolesService.UpSertUserRole(requestRole);
+            }
 
             return await ApiResponse<OrganizationEmployeeResponse>.SuccessAsync();
         }
@@ -144,4 +167,34 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
 
     }
 
+
+    public async Task<ApiResponse<List<OrganizationEmployeeResponse>>> GetAllEmpolyees()
+    {
+        try
+        {
+            // TODO Set user role when employee created
+            // TODO get all data that is required
+            List<OrganizationEmployeeResponse> lstResponse;
+
+            var cacheObject = await _vwOrgEmployeeCache.GetAllFromCacheMemoryAsync(new());
+            if (cacheObject.Count == await _unitOfWork.Repository<Vw_OrganizationEmployee>().GetCount())
+            {
+                lstResponse = _mapper.Map<List<OrganizationEmployeeResponse>>(cacheObject);
+                return await ApiResponse<List<OrganizationEmployeeResponse>>.SuccessAsync(lstResponse);
+            }
+
+            var dbObject =
+                await _unitOfWork.Repository<Vw_OrganizationEmployee>().Entities.Where(x =>
+                    x.OrganizationId == _currentUserService.ParentEntityId).ToListAsync();
+            
+            dbObject.ForEach(x => _vwOrgEmployeeCache.SetInCacheMemoryAsync(x));
+            lstResponse = _mapper.Map<List<OrganizationEmployeeResponse>>(dbObject);
+            
+            return await ApiResponse<List<OrganizationEmployeeResponse>>.SuccessAsync(lstResponse);
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<List<OrganizationEmployeeResponse>>.FatalAsync(e, _logger);
+        }
+    }
 }

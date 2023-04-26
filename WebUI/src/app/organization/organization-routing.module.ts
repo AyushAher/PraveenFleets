@@ -4,6 +4,7 @@ import { RegisterCompanyComponent } from './register/register-company.component'
 import { OrganizationDashboardComponent } from './dashboard/dashboard.component';
 import { CreateEmployeeComponent } from './employee/create-employee.component';
 import { CreateRolesComponent } from './roles/create-roles.component';
+import { EmployeeListComponent } from './employee/employee-list.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: "Employee/Create",
     component: CreateEmployeeComponent
+  },
+  {
+    path: "Employee",
+    component: EmployeeListComponent
   },
   {
     path: "Roles/Create",

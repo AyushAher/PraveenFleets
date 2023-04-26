@@ -16,13 +16,15 @@ import { CreateEmployeeComponent } from './employee/create-employee.component';
 import { CreateRolesComponent } from './roles/create-roles.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
+import { EmployeeListComponent } from './employee/employee-list.component';
 
 
 @NgModule({
   declarations: [
     RegisterCompanyComponent,
     CreateEmployeeComponent,
-    CreateRolesComponent
+    CreateRolesComponent,
+    EmployeeListComponent
   ],
   imports: [
     CommonModule,

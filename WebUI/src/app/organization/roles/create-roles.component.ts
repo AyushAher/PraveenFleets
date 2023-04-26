@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import OrganizationService from '../_services/organization-service.service';
 import OrganizationResponse from 'src/app/_responses/Organization-response';
 import OrganizationRoleService from '../_services/organization-role.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-roles',
@@ -15,6 +16,7 @@ export class CreateRolesComponent implements OnInit {
   constructor(
     _formBuilder: FormBuilder,
     organizationService: OrganizationService,
+    private router: Router,
     private organizationRoleService: OrganizationRoleService
   ) {
     this.Form = _formBuilder.group({
@@ -47,7 +49,7 @@ export class CreateRolesComponent implements OnInit {
   OnSubmit() {
     this.organizationRoleService._object = this.Form.getRawValue()
     this.organizationRoleService.SaveRole()
-      .subscribe()
+      .subscribe(x => this.router.navigate(['']))
   }
 
 

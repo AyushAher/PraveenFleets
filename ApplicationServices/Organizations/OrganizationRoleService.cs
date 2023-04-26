@@ -54,7 +54,7 @@ public class OrganizationRoleService : IOrganizationRolesService
     {
         try
         {
-            _ = await _unitOfWork.StartTransaction();
+           // _ = await _unitOfWork.StartTransaction();
             
             // Check if role exists in org. as well as in roles
             if (!await _roleManager.RoleExistsAsync(request.RoleName))
@@ -69,7 +69,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                 var result = await _roleManager.CreateAsync(applicationRole);
                 if (!result.Succeeded)
                 {
-                    await _unitOfWork.Rollback();
+                   // await _unitOfWork.Rollback();
                     foreach (var error in result.Errors)
                         _logger.LogError("Error Code : {0}; Description : {1}",
                             error.Code, error.Description);
@@ -98,7 +98,7 @@ public class OrganizationRoleService : IOrganizationRolesService
                 // Return if failed
                 if (response <= 0)
                 {
-                    await _unitOfWork.Rollback();
+                  //  await _unitOfWork.Rollback();
                     return await ApiResponse<bool>.FailAsync(
                         "Failed To Save Organization Role. Please try again later!",
                         _logger);
@@ -108,16 +108,19 @@ public class OrganizationRoleService : IOrganizationRolesService
             if (request.User == null)
             {
                 // Commit transaction
-                await _unitOfWork.Commit();
+                //await _unitOfWork.Commit();
                 return await ApiResponse<bool>.SuccessAsync(true);
             }
 
             var user = await _userManager.FindByNameAsync(request.User.Email);
+            
+            //TODO Check why Organization User save is called here
 
             // Assign role to user
-            if (!(await _userManager.AddToRoleAsync(user, request.RoleName)).Succeeded)
+            var userRole = await _userManager.AddToRoleAsync(user, request.RoleName);
+            if (!userRole.Succeeded)
             {
-                await _unitOfWork.Rollback();
+              //  await _unitOfWork.Rollback();
 
                 _logger.LogError("Unable to create the User Role for User {0} / {1}. Check Error Log!",
                     user.Email, user.FirstName + " " + user.LastName);
@@ -127,7 +130,7 @@ public class OrganizationRoleService : IOrganizationRolesService
             }
 
             // Commit transaction
-            await _unitOfWork.Commit();
+            //await _unitOfWork.Commit();
 
             return await ApiResponse<bool>.SuccessAsync(true);
         }

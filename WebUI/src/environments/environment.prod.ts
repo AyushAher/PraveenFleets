@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: "server:80/api",
+  apiUrl: "http://52.66.127.231:8080/api",
   enumNames: {
     Gender: "Gender",
     Salutation: "Salutation",

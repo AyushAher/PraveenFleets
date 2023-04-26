@@ -7,4 +7,6 @@ namespace Interfaces.Organizations;
 public interface IOrganizationEmployeeService : IService
 {
     Task<ApiResponse<OrganizationEmployeeResponse>> SaveOrganizationEmployee(OrganizationEmployeeRequest request);
+    
+    Task<ApiResponse<List<OrganizationEmployeeResponse>>> GetAllEmpolyees();
 }

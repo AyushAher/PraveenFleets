@@ -27,5 +27,8 @@ public class OrganizationEmployeeProfile : Profile
 
         CreateMap<OrganizationEmployeeRequest, UserResponse>()
             .ReverseMap();
+
+        CreateMap<OrganizationEmployeeResponse, Vw_OrganizationEmployee>()
+            .ReverseMap();
     }
 }

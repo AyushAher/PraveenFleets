@@ -61,6 +61,8 @@ public class OrganizationService : IOrganizationService
     {
         try
         {
+            // TODO: Continue if a organization is half register/failed once before/details exists
+
             registerOrganizationRequest.Id = Guid.NewGuid();
             registerOrganizationRequest.AddressRequest.ParentId = registerOrganizationRequest.Id;
             registerOrganizationRequest.AdminDetailsRequest.ParentEntityId = registerOrganizationRequest.Id;
