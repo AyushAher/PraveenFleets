@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user-service.service';
+import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ export class LoginComponent {
 
   constructor(
     _FormBuilder: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {
     this.LoginForm = _FormBuilder.group({
       email: ["", [Validators.required]],
@@ -30,7 +32,8 @@ export class LoginComponent {
     var formData = this.LoginForm.value;
 
     this.userService.Login(formData)
-      .subscribe();
+      .subscribe(() =>
+        this.notificationService.ShowSuccess("Login Success"));
 
   }
 

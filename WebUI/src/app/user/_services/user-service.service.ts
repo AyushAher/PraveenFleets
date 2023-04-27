@@ -9,6 +9,7 @@ import { LoginRequest } from 'src/app/_requests/login-request';
 import { RegisterUserRequest } from 'src/app/_requests/register-request';
 import { LoginResponse } from 'src/app/_responses/login-response';
 import { UserResponse } from 'src/app/_responses/user-response';
+import { NotificationService } from 'src/app/_services/notification.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -22,7 +23,8 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private notificationService: NotificationService
   ) {
     var storedUser = localStorage.getItem('user') || JSON.stringify("");
     this.userSubject = new BehaviorSubject<UserResponse | null>(JSON.parse(storedUser));
@@ -34,17 +36,25 @@ export class UserService {
     return this.http.post<ApiResponse<LoginResponse>>(`${environment.apiUrl}/User/Authenticate`, formData)
       .pipe(
         map(x => {
-          if (x.failed) return null
-          if (!x.data) return null;
+          if (x.failed) {
+            this.notificationService.ShowError(x.messages)
+            return null
+          }
 
-          this.GetUserById(x.data.userId).subscribe(userResponse => {
-            if (!userResponse) return null;
-            userResponse.token = x.data;
-            this.userSubject.next(userResponse);
-            localStorage.setItem('user', JSON.stringify(userResponse));
-            this.router.navigate([this.returnUrl || "/"]);
-            return;
-          })
+          if (!x.data) {
+            this.notificationService.ShowError(x.messages)
+            return null;
+          }
+
+          this.GetUserById(x.data.userId)
+            .subscribe(userResponse => {
+              if (!userResponse) return null;
+              userResponse.token = x.data;
+              this.userSubject.next(userResponse);
+              localStorage.setItem('user', JSON.stringify(userResponse));
+              this.router.navigate([this.returnUrl || "/"]);
+              return;
+            })
 
           return x.data;
         })

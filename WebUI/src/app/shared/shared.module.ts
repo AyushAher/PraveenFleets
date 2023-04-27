@@ -7,9 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ResponseInterceptor, ErrorInterceptor } from '../_helpers/interceptor';
 import { JwtInterceptor } from '../_helpers/jwtinterceptor';
-import { LayoutComponent } from '../layout/layout.component';
-import { NavBarComponent } from '../layout/nav-bar/nav-bar.component';
-import { SideNavBarComponent } from '../layout/side-nav-bar/side-nav-bar.component';
+import { LayoutComponent } from './layout/layout.component';
+import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+import { SideNavBarComponent } from './layout/side-nav-bar/side-nav-bar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 

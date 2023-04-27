@@ -1,5 +1,5 @@
 body {
-    font-family: "avantgarde_bk_btbook" !important;
+    font-family: "Exo" !important;
     color: #000;
     background: #f0f0f0 !important;
 }
@@ -36,11 +36,11 @@ a {
 }
 
 .primaryColor {
-    color: var(--var(--secondaryColor));
+    color: var(--secondaryColor);
 }
 
 .primaryColor2 {
-    color: var(--var(--secondaryColor));
+    color: var(--secondaryColor);
 }
 
 .linkIcon {
@@ -50,7 +50,7 @@ a {
 }
 
 .table.dataTable thead th {
-    background: var(--var(--secondaryColor));
+    background: var(--secondaryColor);
     color: #fff;
 }
 
@@ -61,8 +61,8 @@ a {
 
 .page-item.active .page-link {
     color: #fff;
-    background-color: var(--var(--secondaryColor));
-    border-color: var(--var(--secondaryColor));
+    background-color: var(--secondaryColor);
+    border-color: var(--secondaryColor);
 }
 
 .page-link {
@@ -70,7 +70,7 @@ a {
 }
 
 .page-link:hover {
-    color: var(--var(--secondaryColor));
+    color: var(--secondaryColor);
 }
 
 .wrapper {
@@ -174,7 +174,7 @@ a {
 
 .loginContainer form input {
     padding-left: 50px !important;
-    border: 2px solid var(--var(--secondaryColor));
+    border: 2px solid var(--secondaryColor);
 }
 
 .imgbox {
@@ -194,22 +194,22 @@ a {
 }
 
 .btn-cim {
-    background-color: var(--var(--secondaryColor));
+    background-color: var(--secondaryColor);
     color: #fff;
-    border: 1px solid var(--var(--secondaryColor));
+    border: 1px solid var(--secondaryColor);
 }
 
 .btn-cim:hover,
 .btn-cim:focus {
-    background-color: var(--var(--secondaryColor));
-    border: 1px solid var(--var(--secondaryColor));
+    background-color: var(--secondaryColor);
+    border: 1px solid var(--secondaryColor);
     box-shadow: 0 0 0 0.25rem rgb(214 248 205 / 50%);
 }
 
 .form-control:focus {
     color: #212529;
     background-color: #fff;
-    border-color: var(--var(--secondaryColor));
+    border-color: var(--secondaryColor);
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(214 248 205 / 50%);
 }
@@ -255,7 +255,7 @@ a {
     display: flex;
     align-items: center;
     height: 35px;
-    border-left: 1px solid var(--var(--secondaryColor));
+    border-left: 1px solid var(--secondaryColor);
     margin-left: 1rem;
 }
 
@@ -308,7 +308,7 @@ a {
     top: 0;
     bottom: 0;
     left: 0;
-    background: var(--var(--secondaryColor));
+    background: var(--secondaryColor);
     border-right: 0 solid #e4e4e4;
     z-index: 11;
     box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%),
@@ -326,7 +326,7 @@ a {
     bottom: 0;
     padding: 0 15px;
     z-index: 5;
-    background: var(--var(--secondaryColor));
+    background: var(--secondaryColor);
     background-clip: padding-box;
     justify-content: center;
     box-shadow: 0 0.525rem 0.5rem rgba(0, 0, 0, 0.095) !important;

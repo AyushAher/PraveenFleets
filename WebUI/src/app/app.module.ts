@@ -2,10 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { LayoutComponent } from './layout/layout.component';
 import AppRoutingModule from './app-routing.module';
-import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
-import { SideNavBarComponent } from './layout/side-nav-bar/side-nav-bar.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResponseInterceptor, ErrorInterceptor } from './_helpers/interceptor';

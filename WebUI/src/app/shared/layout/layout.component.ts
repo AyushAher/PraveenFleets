@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
-import { SpinnerService } from '../_services/sipnner.service';
-import { ActivatedRoute } from '@angular/router';
-import LayoutService from '../_services/layout.service';
+import LayoutService from 'src/app/_services/layout.service';
+import { SpinnerService } from 'src/app/_services/sipnner.service';
+
 
 @Component({
   selector: 'layout',

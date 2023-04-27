@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,400;0,800;1,100;1,400&display=swap');
+
 /* You can add global styles to this file, and also import other style files */
 :root {
   --primaryColor: #fafafa;
@@ -38,6 +40,7 @@ i {
 body {
   overflow-y: clip;
   width: 100vw !important;
+  font-family: 'Exo', sans-serif !important;
 }
 
 html,
@@ -47,9 +50,22 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  /* font-family: Roboto, "Helvetica Neue", sans-serif; */
 }
 
 h3 {
   font-size: 25px !important;
+}
+
+.mat-h1,
+.mat-headline,
+.mat-typography .mat-h1,
+.mat-typography .mat-headline,
+.mat-typography h1 {
+
+  font-family: 'Exo', sans-serif !important;
+}
+
+* {
+  font-family: 'Exo', sans-serif !important;
 }
