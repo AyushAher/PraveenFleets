@@ -8,12 +8,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end me-5"
-                [ngClass]="{ show: isExpanded }">
+                [ngClass]="{ show: isExpanded }" *ngIf="User">
                 <ul class="navbar-nav flex-grow">
                     <li class="nav-item dropdown">
                         <button class="btn nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            {{User?.userName}}
+                            {{User.userName}}
                         </button>
                         <ul class="dropdown-menu">
                             <!-- <li><a class="dropdown-item" href="#">Organization Id: </a></li> -->

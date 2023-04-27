@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-9">
             <form [formGroup]="LoginForm" (ngSubmit)="OnSubmit()">
@@ -19,6 +19,48 @@
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+</div> -->
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-7 p-0 imgbox">
+        </div>
+        <div class="col-sm-5 text-center">
+            <div class="d-flex align-items-center justify-content-center h-100">
+                <div class="loginContainer">
+                    <h1 class="primaryColor2 pb-4">Login</h1>
+                    <!--Login Form-->
+                    <form class="loginForm" [formGroup]="LoginForm" (ngSubmit)="OnSubmit()">
+                        <div class="form-floating mb-3">
+                            <span><i class="bi bi-person-fill primaryColor"></i></span>
+                            <input type="text" class="form-control rounded-pill" formControlName="email" required
+                                id="floatingInput" placeholder="Email" />
+                            <label for="floatingInput">Email</label>
+                        </div>
+                        <div class="form-floating">
+                            <span><i class="bi bi-lock-fill primaryColor"></i></span>
+                            <input type="password" class="form-control rounded-pill" formControlName="password" required
+                                id="floatingPassword" placeholder="Password" />
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                        <div class="row accountBtns">
+                            <div class="col-md-6 d-grid gap-2">
+                                <button class="" type="submit">Login</button>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <button type="button"> Forgot Password? </button>
+                            </div>
+                        </div>
+                        <div class="row registerBtns">
+                            <div class="col-md-12"><a [routerLink]="['/user','login']"> New User? Sign IN</a></div>
+                            <div class="col-md-12"><a [routerLink]="['/organization', 'register']"> Register your
+                                    Organization</a></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -17,6 +17,7 @@ import { CreateRolesComponent } from './roles/create-roles.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
 import { EmployeeListComponent } from './employee/employee-list.component';
+import { OrganizationDashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { EmployeeListComponent } from './employee/employee-list.component';
     RegisterCompanyComponent,
     CreateEmployeeComponent,
     CreateRolesComponent,
-    EmployeeListComponent
+    EmployeeListComponent,
+    OrganizationDashboardComponent
   ],
   imports: [
     CommonModule,

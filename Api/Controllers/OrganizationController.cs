@@ -19,6 +19,7 @@ public class OrganizationController : ControllerBase
         _organizationService = organizationService;
     }
 
+    [AllowAnonymous]
     [HttpPost("Register")]
     public async Task<ApiResponse<OrganizationResponse>> RegisterOrganization(
         RegisterOrganizationRequest registerOrganizationRequest)

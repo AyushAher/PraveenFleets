@@ -20,9 +20,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent,
-    NavBarComponent,
-    SideNavBarComponent,
     HomeComponent,
     NotFoundComponent
   ],

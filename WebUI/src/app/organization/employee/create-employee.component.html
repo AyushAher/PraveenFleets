@@ -1,147 +1,150 @@
-<div class="container">
-    <form [formGroup]="EmployeeForm">
-        <div class="row my-3">
-            <div class="col-md-2 my-3">
-                <label for="salutation">Salutation<span class="text-danger">*</span></label>
-                <select type="text" class="form-select" placeholder="Enter your First Name" formControlName="salutation"
-                    name="salutation" id="salutation"
-                    [ngClass]="{'is-invalid':employee.salutation.touched && employee.salutation.errors}">
-                    <option *ngFor="let i of SalutationList" [value]="i.value">{{i.valueDescription}}</option>
-                </select>
-                <div *ngIf="employee.salutation.touched && employee.salutation.errors" class="invalid-feedback">
-                    <div *ngIf="employee.salutation.errors.required" class="text-danger">
-                        Salutation is required
+<layout>
+    <div class="container">
+        <form [formGroup]="EmployeeForm">
+            <div class="row my-3">
+                <div class="col-md-2 my-3">
+                    <label for="salutation">Salutation<span class="text-danger">*</span></label>
+                    <select type="text" class="form-select" placeholder="Enter your First Name"
+                        formControlName="salutation" name="salutation" id="salutation"
+                        [ngClass]="{'is-invalid':employee.salutation.touched && employee.salutation.errors}">
+                        <option *ngFor="let i of SalutationList" [value]="i.value">{{i.valueDescription}}</option>
+                    </select>
+                    <div *ngIf="employee.salutation.touched && employee.salutation.errors" class="invalid-feedback">
+                        <div *ngIf="employee.salutation.errors.required" class="text-danger">
+                            Salutation is required
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5 my-3">
-                <label for="firstName">First Name<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Enter your First Name" formControlName="firstName"
-                    name="firstName" id="firstName"
-                    [ngClass]="{'is-invalid':employee.firstName.touched && employee.firstName.errors}">
+                <div class="col-md-5 my-3">
+                    <label for="firstName">First Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter your First Name"
+                        formControlName="firstName" name="firstName" id="firstName"
+                        [ngClass]="{'is-invalid':employee.firstName.touched && employee.firstName.errors}">
 
-                <div *ngIf="employee.firstName.touched && employee.firstName.errors" class="invalid-feedback">
-                    <div *ngIf="employee.firstName.errors.required" class="text-danger">
-                        First Name is required
-                    </div>
-                    <div *ngIf="employee.firstName.errors.maxlength" class="text-danger">Max Length
-                        is 60
-                    </div>
-                    <div *ngIf="employee.firstName.errors.minlength" class="text-danger">Min Length
-                        is 1
+                    <div *ngIf="employee.firstName.touched && employee.firstName.errors" class="invalid-feedback">
+                        <div *ngIf="employee.firstName.errors.required" class="text-danger">
+                            First Name is required
+                        </div>
+                        <div *ngIf="employee.firstName.errors.maxlength" class="text-danger">Max Length
+                            is 60
+                        </div>
+                        <div *ngIf="employee.firstName.errors.minlength" class="text-danger">Min Length
+                            is 1
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5 my-3">
-                <label for="lastName">Last Name<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Enter your Last name" formControlName="lastName"
-                    name="lastName" id="lastName"
-                    [ngClass]="{'is-invalid':employee.lastName.touched && employee.lastName.errors}">
+                <div class="col-md-5 my-3">
+                    <label for="lastName">Last Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter your Last name"
+                        formControlName="lastName" name="lastName" id="lastName"
+                        [ngClass]="{'is-invalid':employee.lastName.touched && employee.lastName.errors}">
 
-                <div *ngIf="employee.lastName.touched && employee.lastName.errors" class="invalid-feedback">
-                    <div *ngIf="employee.lastName.errors.required" class="text-danger">
-                        Last Name is required
-                    </div>
-                    <div *ngIf="employee.lastName.errors.maxlength" class="text-danger">
-                        Max Length is 60
-                    </div>
-                    <div *ngIf="employee.lastName.errors.minlength" class="text-danger">
-                        Min Length is 1
+                    <div *ngIf="employee.lastName.touched && employee.lastName.errors" class="invalid-feedback">
+                        <div *ngIf="employee.lastName.errors.required" class="text-danger">
+                            Last Name is required
+                        </div>
+                        <div *ngIf="employee.lastName.errors.maxlength" class="text-danger">
+                            Max Length is 60
+                        </div>
+                        <div *ngIf="employee.lastName.errors.minlength" class="text-danger">
+                            Min Length is 1
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2 my-3">
-                <label for="gender">Gender<span class="text-danger">*</span></label>
-                <select type="text" class="form-select" placeholder="Enter your First Name" formControlName="gender"
-                    name="gender" id="gender"
-                    [ngClass]="{'is-invalid':employee.gender.touched && employee.gender.errors}">
-                    <option *ngFor="let i of GenderList" [value]="i.value">{{i.valueDescription}}</option>
-                </select>
-                <div *ngIf="employee.gender.touched && employee.gender.errors" class="invalid-feedback">
-                    <div *ngIf="employee.gender.errors.required" class="text-danger">
-                        Gender is required
+                <div class="col-md-2 my-3">
+                    <label for="gender">Gender<span class="text-danger">*</span></label>
+                    <select type="text" class="form-select" placeholder="Enter your First Name" formControlName="gender"
+                        name="gender" id="gender"
+                        [ngClass]="{'is-invalid':employee.gender.touched && employee.gender.errors}">
+                        <option *ngFor="let i of GenderList" [value]="i.value">{{i.valueDescription}}</option>
+                    </select>
+                    <div *ngIf="employee.gender.touched && employee.gender.errors" class="invalid-feedback">
+                        <div *ngIf="employee.gender.errors.required" class="text-danger">
+                            Gender is required
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-5 my-3">
-                <label for="email">Email Id<span class="text-danger">*</span></label>
-                <input type="email" class="form-control" placeholder="Enter your Email Id" formControlName="email"
-                    name="email" id="email" [ngClass]="{'is-invalid':employee.email.touched && employee.email.errors}">
+                <div class="col-md-5 my-3">
+                    <label for="email">Email Id<span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" placeholder="Enter your Email Id" formControlName="email"
+                        name="email" id="email"
+                        [ngClass]="{'is-invalid':employee.email.touched && employee.email.errors}">
 
-                <div *ngIf="employee.email.touched && employee.email.errors" class="invalid-feedback">
-                    <div *ngIf="employee.email.errors.required" class="text-danger">
-                        Email Id is required
-                    </div>
-                    <div *ngIf="employee.email.errors.pattern" class="text-danger">
-                        Not a valid Email Id
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5 my-3">
-                <label for="phoneNumber">Contact Number<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Enter your Contact Number"
-                    formControlName="phoneNumber" name="phoneNumber" id="phoneNumber"
-                    [ngClass]="{'is-invalid':employee.phoneNumber.touched && employee.phoneNumber.errors}">
-
-                <div *ngIf="employee.phoneNumber.touched && employee.phoneNumber.errors" class="invalid-feedback">
-                    <div *ngIf="employee.phoneNumber.errors.required" class="text-danger">
-                        Contact Number is required
-                    </div>
-                    <div *ngIf="employee.phoneNumber.errors.maxlength" class="text-danger">
-                        Max Length is 250
+                    <div *ngIf="employee.email.touched && employee.email.errors" class="invalid-feedback">
+                        <div *ngIf="employee.email.errors.required" class="text-danger">
+                            Email Id is required
+                        </div>
+                        <div *ngIf="employee.email.errors.pattern" class="text-danger">
+                            Not a valid Email Id
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2" *ngIf="!IsAdmin">
-                <label for="roleId">Role<span class="text-danger">*</span></label>
-                <select type="text" class="form-select" formControlName="roleId" name="roleId" id="roleId"
-                    [ngClass]="{'is-invalid':employee.roleId.touched && employee.roleId.errors}">
-                    <option *ngFor="let i of RoleList" [value]="i.roleId">{{i.roleName}}</option>
-                </select>
-                <div *ngIf="employee.roleId.touched && employee.roleId.errors" class="invalid-feedback">
-                    <div *ngIf="employee.roleId.errors.required" class="text-danger">
-                        roleId is required
+                <div class="col-md-5 my-3">
+                    <label for="phoneNumber">Contact Number<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="Enter your Contact Number"
+                        formControlName="phoneNumber" name="phoneNumber" id="phoneNumber"
+                        [ngClass]="{'is-invalid':employee.phoneNumber.touched && employee.phoneNumber.errors}">
+
+                    <div *ngIf="employee.phoneNumber.touched && employee.phoneNumber.errors" class="invalid-feedback">
+                        <div *ngIf="employee.phoneNumber.errors.required" class="text-danger">
+                            Contact Number is required
+                        </div>
+                        <div *ngIf="employee.phoneNumber.errors.maxlength" class="text-danger">
+                            Max Length is 250
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
-                <mat-form-field appearance="fill" floatLabel="auto">
-                    <mat-label>Password</mat-label>
-                    <input matInput placeholder="Password" type="password" formControlName="password"
-                        [ngClass]="{'is-invalid':employee.password.touched && employee.password.errors}" name="password"
-                        id="password" required>
-                    <mat-error *ngIf="employee.password.errors?.required">Password is required</mat-error>
+                <div class="col-md-2" *ngIf="!IsAdmin">
+                    <label for="roleId">Role<span class="text-danger">*</span></label>
+                    <select type="text" class="form-select" formControlName="roleId" name="roleId" id="roleId"
+                        [ngClass]="{'is-invalid':employee.roleId.touched && employee.roleId.errors}">
+                        <option *ngFor="let i of RoleList" [value]="i.roleId">{{i.roleName}}</option>
+                    </select>
+                    <div *ngIf="employee.roleId.touched && employee.roleId.errors" class="invalid-feedback">
+                        <div *ngIf="employee.roleId.errors.required" class="text-danger">
+                            roleId is required
+                        </div>
+                    </div>
+                </div>
+                <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Password</mat-label>
+                        <input matInput placeholder="Password" type="password" formControlName="password"
+                            [ngClass]="{'is-invalid':employee.password.touched && employee.password.errors}"
+                            name="password" id="password" required>
+                        <mat-error *ngIf="employee.password.errors?.required">Password is required</mat-error>
 
-                </mat-form-field>
-            </div>
-            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}" *ngIf="IsAdmin">
-                <mat-form-field appearance="fill" floatLabel="auto">
-                    <mat-label>Confirm Password</mat-label>
-                    <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword"
-                        [ngClass]="{'is-invalid':employee.confirmPassword.touched && employee.confirmPassword.errors}"
-                        name="confirmPassword" id="confirmPassword" required>
-                    <mat-error *ngIf="employee.confirmPassword.errors?.required">
-                        Confirm Password is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
-                <mat-form-field class="w-100" appearance="fill" floatLabel="auto">
-                    <mat-label>Weekly Offs</mat-label>
-                    <mat-select [formControl]="weeklyOffsControl" multiple>
-                        <mat-option *ngFor="let weekDay of WeekDaysList"
-                            [value]="weekDay.value">{{weekDay.valueDescription}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="weeklyOffsControl.errors?.required">Weekly Offs is required</mat-error>
-                </mat-form-field>
+                    </mat-form-field>
+                </div>
+                <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}" *ngIf="IsAdmin">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Confirm Password</mat-label>
+                        <input matInput placeholder="Confirm Password" type="password" formControlName="confirmPassword"
+                            [ngClass]="{'is-invalid':employee.confirmPassword.touched && employee.confirmPassword.errors}"
+                            name="confirmPassword" id="confirmPassword" required>
+                        <mat-error *ngIf="employee.confirmPassword.errors?.required">
+                            Confirm Password is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="my-2" [ngClass]="{'col-md-4': IsAdmin, 'col-md-5': !IsAdmin}">
+                    <mat-form-field class="w-100" appearance="fill" floatLabel="auto">
+                        <mat-label>Weekly Offs</mat-label>
+                        <mat-select [formControl]="weeklyOffsControl" multiple>
+                            <mat-option *ngFor="let weekDay of WeekDaysList"
+                                [value]="weekDay.value">{{weekDay.valueDescription}}</mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="weeklyOffsControl.errors?.required">Weekly Offs is required</mat-error>
+                    </mat-form-field>
+                </div>
+
             </div>
 
-        </div>
+            <shared-address [(AddressForm)]="AddressForm"></shared-address>
 
-        <shared-address [(AddressForm)]="AddressForm"></shared-address>
-
-        <div *ngIf="!IsAdmin">
-            <button mat-raised-button color="primary" (click)="OnSubmit()">Submit</button>
-        </div>
-    </form>
-</div>
+            <div *ngIf="!IsAdmin">
+                <button mat-raised-button color="primary" (click)="OnSubmit()">Submit</button>
+            </div>
+        </form>
+    </div>
+</layout>

@@ -1,32 +1,35 @@
-<div class="container">
-    <form [formGroup]="Form" (ngSubmit)="OnSubmit()">
-        <div class="row my-3">
-            <div class="col-md-6 my-3">
-                <label for="organization">Organization<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Organization Name" formControlName="organization"
-                    name="organization" id="organization"
-                    [ngClass]="{'is-invalid':f.organization.touched && f.organization.errors}">
-                <div *ngIf="f.organization.touched && f.organization.errors" class="invalid-feedback">
-                    <div *ngIf="f.organization.errors.required" class="text-danger">
-                        Organization is required
+<layout>
+    <div class="container">
+        <form [formGroup]="Form" (ngSubmit)="OnSubmit()">
+            <div class="row my-3">
+                <div class="col-md-6 my-3">
+                    <label for="organization">Organization<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="Organization Name"
+                        formControlName="organization" name="organization" id="organization"
+                        [ngClass]="{'is-invalid':f.organization.touched && f.organization.errors}">
+                    <div *ngIf="f.organization.touched && f.organization.errors" class="invalid-feedback">
+                        <div *ngIf="f.organization.errors.required" class="text-danger">
+                            Organization is required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 my-3">
+                    <label for="roleName">Role Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="Name for Role" formControlName="roleName"
+                        name="roleName" id="roleName"
+                        [ngClass]="{'is-invalid':f.roleName.touched && f.roleName.errors}">
+                    <div *ngIf="f.roleName.touched && f.roleName.errors" class="invalid-feedback">
+                        <div *ngIf="f.roleName.errors.required" class="text-danger">
+                            Role Name is required
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 my-3">
-                <label for="roleName">Role Name<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" placeholder="Name for Role" formControlName="roleName"
-                    name="roleName" id="roleName" [ngClass]="{'is-invalid':f.roleName.touched && f.roleName.errors}">
-                <div *ngIf="f.roleName.touched && f.roleName.errors" class="invalid-feedback">
-                    <div *ngIf="f.roleName.errors.required" class="text-danger">
-                        Role Name is required
-                    </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <button mat-raised-button color="primary" type="submit">Submit</button>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                <button mat-raised-button color="primary" type="submit">Submit</button>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+</layout>
