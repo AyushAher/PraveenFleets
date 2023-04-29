@@ -6,9 +6,9 @@ using Serilog;
 using Shared.Configuration;
 using Utility.Extensions;
 
-Log.Logger = new LoggerConfiguration().CreateLogger();
-    //.WriteTo.Console()
-    //.CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 Log.Information("Starting up");
 
@@ -62,14 +62,14 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
+    
     builder.Services.AddCors(options =>
     {
-        options.AddDefaultPolicy(policy =>
+        options.AddPolicy("Production", policy =>
         {
-            policy.AllowAnyOrigin();
-            policy.AllowAnyMethod();
-            policy.AllowAnyHeader();
+            policy.WithOrigins("http://localhost:800", "http://52.66.127.231")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
     });
 
@@ -81,12 +81,10 @@ try
     app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
-
     app.UseAuthentication();
     app.UseAuthorization();
-
+    app.UseCors("Production");
     app.MapControllers();
-    app.UseCors();
     app.Run();
 }
 catch (Exception ex)

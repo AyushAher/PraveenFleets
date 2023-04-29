@@ -64,7 +64,7 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="request">Request containing all user details</param>
     /// <returns>User Id</returns>
-    public async Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request)
+    public async Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request,bool isAdmin = false)
     {
         try
         {
@@ -96,7 +96,6 @@ public class UserService : IUserService
                 }
             }
 
-            // TODO Send Emails
 
 
             if (request.Password != request.ConfirmPassword)
@@ -136,7 +135,9 @@ public class UserService : IUserService
 
             _logger.LogInformation("Attaching the user {0} to {1}!", request.Email, request.Role);
 
-             _ = await SendConfirmEMailCode(user);
+            // TODO Send Emails
+
+            if (!isAdmin) _ = await SendConfirmEMailCode(user);
             _logger.LogInformation("User {0} created successfully!", request.Email);
 
             var getUserById = await GetAsync(user.Id);
@@ -167,7 +168,7 @@ public class UserService : IUserService
             if (user == null)
             {
                 _logger.LogError("The User with the email address " + request.EMail + " was not found!");
-                return await ApiResponse<TokenResponse>.FailAsync("Some Error Occurred while registering new user",
+                return await ApiResponse<TokenResponse>.FailAsync("Email not found. Please Sign Up",
                     _logger);
             }
 
@@ -176,8 +177,10 @@ public class UserService : IUserService
             {
                 _logger.LogError("The User with the email address " + request.EMail +
                                  " has not yet confirmed the email address and attempted to login!");
-                // return await ApiResponse<TokenResponse>.FailAsync("E-Mail not confirmed.",
-                //   _logger);
+                _ = await SendConfirmEMailCode(user);
+                return await ApiResponse<TokenResponse>.FailAsync(
+                    "Email not confirmed. Please check your inbox and confirm your email address",
+                    _logger);
             }
 
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
@@ -271,7 +274,7 @@ public class UserService : IUserService
                 _ = await SendWelcomeEMail(user);
 
                 return await BaseApiResponse.SuccessAsync(
-                    string.Format("Account Confirmed for '{0}'. You can now use Praveen Fleets", user.FullName));
+                    string.Format("Account Confirmed for '{0}'. You can now use DG Cap", user.FullName));
             }
 
             _logger.LogError("Unable to confirm user with " + request.EMail + ". Identity returned error.");
@@ -364,7 +367,7 @@ public class UserService : IUserService
             if (byEmailAsync == null)
             {
                 _logger.LogError("User {0} is not found while resetting the password!", request.EMail);
-                return await BaseApiResponse.FailAsync("Invalid User! Contact Praveen Fleets Support.", _logger);
+                return await BaseApiResponse.FailAsync("Invalid User! Contact DG Cap Support.", _logger);
             }
 
             var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
@@ -868,7 +871,19 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    private async Task<bool> SendConfirmEMailCode(ApplicationUser user)
+    public async Task<bool> SendConfirmEMailCode(Guid userId)
+    {
+        var user = _userManager.Users.FirstOrDefault(u => u.Id == userId);
+        if (user == null) return false;
+        return await SendConfirmEMailCode(user);
+    }
+
+    /// <summary>
+    /// Send Email confirmation code
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    public async Task<bool> SendConfirmEMailCode(ApplicationUser user)
     {
         var verificationUrl = await GenerateVerificationUrl(user);
 
@@ -898,7 +913,7 @@ public class UserService : IUserService
                 Encoding.UTF8.GetBytes(await _userManager.GenerateEmailConfirmationTokenAsync(user)));
         _logger.LogInformation("EMail verification code for " + user.Email + " is " + str);
 
-        return QueryHelpers.AddQueryString(QueryHelpers.AddQueryString(new Uri((_appConfig.SiteUrl ?? "") + _appConfig.AccConfirmPath).ToString(), "userEmail",user.Email), "token", str);
+        return QueryHelpers.AddQueryString(QueryHelpers.AddQueryString(new Uri((_appConfig.SiteUrl ?? "") + _appConfig.AccConfirmPath).ToString(), "useremail", user.Email), "token", str);
     }
 
     /// <summary>

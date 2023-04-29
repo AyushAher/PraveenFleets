@@ -18,6 +18,9 @@ import { SharedModule } from '../shared/shared.module';
 import { MatInputModule } from '@angular/material/input';
 import { EmployeeListComponent } from './employee/employee-list.component';
 import { OrganizationDashboardComponent } from './dashboard/dashboard.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -26,7 +29,8 @@ import { OrganizationDashboardComponent } from './dashboard/dashboard.component'
     CreateEmployeeComponent,
     CreateRolesComponent,
     EmployeeListComponent,
-    OrganizationDashboardComponent
+    OrganizationDashboardComponent,
+    RegisterEmployeeComponent
   ],
   imports: [
     CommonModule,
@@ -39,8 +43,9 @@ import { OrganizationDashboardComponent } from './dashboard/dashboard.component'
     AgGridModule,
     MatSelectModule,
     SharedModule,
-    MatInputModule
-
+    MatInputModule,
+    MatSnackBarModule,
+    MatIconModule
   ],
 
   providers: [

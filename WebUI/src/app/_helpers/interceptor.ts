@@ -28,6 +28,9 @@ export class ErrorInterceptor implements http.HttpInterceptor {
                 this.loaderService.requestEnded()
             }
         }, (err: http.HttpErrorResponse) => {
+            if ([400].includes(err.status)) {
+                this.notificationService.ShowError(err.message);
+            }
             if ([401, 403].includes(err.status) && this.userService.userValue) {
                 // auto logout if 401 or 403 response returned from api
                 this.userService.logout();
@@ -42,7 +45,7 @@ export class ErrorInterceptor implements http.HttpInterceptor {
 
             const error = err.error?.message || err.statusText;
             console.error(err);
-            this.notificationService.ShowError("Some error ocurred. Please contact System Administrator.")
+            this.notificationService.ShowError(error)
         }
         ))
 
@@ -60,6 +63,7 @@ export class ResponseInterceptor implements http.HttpInterceptor {
             tap((event: http.HttpEvent<ApiResponse<any>>) => {
                 if (event instanceof http.HttpResponse) {
                     // change the response body here
+                    debugger;
                     if (event.body?.failed) this.notificationService.ShowError(event.body.messages);
                     var eve = event.clone({
                         body: event.body?.data

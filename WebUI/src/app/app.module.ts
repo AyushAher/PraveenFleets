@@ -12,13 +12,15 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { SharedModule } from './shared/shared.module';
 import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     HttpClientModule,
@@ -28,7 +30,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
-    SharedModule
+    SharedModule,
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [
     {
@@ -46,6 +50,14 @@ import { NotFoundComponent } from './not-found/not-found.component';
       useClass: JwtInterceptor,
       multi: true
     },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 5000,
+        horizontalPosition: "right",
+        verticalPosition: "top"
+      }
+    }
   ],
   bootstrap: [AppComponent],
 })

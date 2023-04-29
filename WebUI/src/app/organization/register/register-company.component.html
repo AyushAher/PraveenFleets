@@ -1,36 +1,41 @@
 <div class="container">
-    <mat-stepper [linear]="true" #stepper>
+    <div class="back m-4">
+        <button mat-raised-button color="accent" [routerLink]="['/user','login']"> Back to Login</button>
+    </div>
+
+    <mat-stepper [linear]="false" #stepper>
         <mat-step [stepControl]="OrganizationForm" label="Organization Details">
             <form [formGroup]="OrganizationForm">
                 <div class="row my-3">
-                    <div class="col-md-8 my-3">
-                        <label for="OrganizationForm">Organization Name<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Name of your Organization"
-                            formControlName="name" name="name" id="name"
-                            [ngClass]="{'is-invalid':form.name.touched && form.name.errors}">
+                    <div class="col-md-6 my-3">
+                        <mat-form-field appearance="fill" floatLabel="auto">
+                            <mat-label for="OrganizationForm">Organization Name</mat-label>
+                            <input matInput type="text" placeholder="Name of your Organization" formControlName="name"
+                                name="name" id="name" required
+                                [ngClass]="{'is-invalid':form.name.touched && form.name.errors}">
 
-                        <div *ngIf="form.name.touched && form.name.errors" class="invalid-feedback">
-                            <div *ngIf="form.name.errors.required" class="text-danger">
+                            <mat-error *ngIf="form.name.errors?.required">
                                 Organization Name is required
-                            </div>
-                            <div *ngIf="form.name.errors.maxlength" class="text-danger">Max Length
-                                is 200
-                            </div>
-                        </div>
+                            </mat-error>
+                            <mat-error *ngIf="form.name.errors?.maxlength">
+                                Max Length is 200
+                            </mat-error>
+                        </mat-form-field>
                     </div>
-                    <div class="col-md-8 my-3">
-                        <label for="gstNumber">GST Number<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="GST Number Of your Organization"
-                            formControlName="gstNumber" name="gstNumber" id="gstNumber"
-                            [ngClass]="{'is-invalid':form.gstNumber.touched && form.gstNumber.errors}">
+                    <div class="col-md-6 my-3">
+                        <mat-form-field appearance="fill" floatLabel="auto">
+                            <mat-label for="gstNumber">GST Number<span class="text-danger">*</span></mat-label>
+                            <input matInput type="text" placeholder="GST Number Of your Organization"
+                                formControlName="gstNumber" name="gstNumber" id="gstNumber" required
+                                [ngClass]="{'is-invalid':form.gstNumber.touched && form.gstNumber.errors}">
 
-                        <div *ngIf="form.gstNumber.touched && form.gstNumber.errors" class="invalid-feedback">
-                            <div *ngIf="form.gstNumber.errors.required" class="text-danger">
+                            <mat-error *ngIf="form.gstNumber.errors?.required" class="text-danger">
                                 GST Number is required
-                            </div>
-                            <div *ngIf="form.gstNumber.errors.maxlength" class="text-danger">Max Length is 200
-                            </div>
-                        </div>
+                            </mat-error>
+                            <mat-error *ngIf="form.gstNumber.errors?.maxlength" class="text-danger">
+                                Max Length is 200
+                            </mat-error>
+                        </mat-form-field>
                     </div>
                 </div>
                 <div>

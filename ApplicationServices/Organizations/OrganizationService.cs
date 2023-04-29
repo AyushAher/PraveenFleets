@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Organization;
 using Shared.Responses.Organization;
+using static Shared.Configuration.PermissionsConfiguration;
 
 namespace ApplicationServices.Organizations;
 
@@ -82,7 +83,7 @@ public class OrganizationService : IOrganizationService
             }
 
             var adminRegisterRequest =
-                await _userService.RegisterUserAsync(registerOrganizationRequest.AdminDetailsRequest);
+                await _userService.RegisterUserAsync(registerOrganizationRequest.AdminDetailsRequest, true);
 
             if (adminRegisterRequest.Failed)
             {
@@ -115,7 +116,7 @@ public class OrganizationService : IOrganizationService
                 await _unitOfWork.Rollback();
                 return await ApiResponse<OrganizationResponse>.FailAsync(
                     "Failed To Save Organization. Please try again later!",
-                _logger);
+                    _logger);
             }
 
             // Commit transaction
@@ -163,6 +164,11 @@ public class OrganizationService : IOrganizationService
 
             // Map post to response obj and return data
             var responseObj = _mapper.Map<OrganizationResponse>(organizationMappedObj);
+
+            // Send Emails
+            _ = await _userService.SendConfirmEMailCode(adminRegisterRequest.Data.Id);
+            // TODO: Send New Organization Email
+
 
             return await ApiResponse<OrganizationResponse>.SuccessAsync(responseObj);
         }

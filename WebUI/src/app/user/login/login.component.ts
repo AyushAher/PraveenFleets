@@ -32,8 +32,9 @@ export class LoginComponent {
     var formData = this.LoginForm.value;
 
     this.userService.Login(formData)
-      .subscribe(() =>
-        this.notificationService.ShowSuccess("Login Success"));
+      .subscribe((x) => {
+        if (x) this.notificationService.ShowSuccess("Login Success")
+      });
 
   }
 

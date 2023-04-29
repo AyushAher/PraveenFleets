@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterCompanyComponent } from './register/register-company.component';
 import { OrganizationDashboardComponent } from './dashboard/dashboard.component';
-import { CreateEmployeeComponent } from './employee/create-employee.component';
 import { CreateRolesComponent } from './roles/create-roles.component';
 import { EmployeeListComponent } from './employee/employee-list.component';
+import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
+import { AuthGuard } from '../_helpers/auth.guard';
 
 const routes: Routes = [
   {
@@ -13,19 +14,23 @@ const routes: Routes = [
   },
   {
     path: "dashboard",
-    component: OrganizationDashboardComponent
+    component: OrganizationDashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: "Employee/Create",
-    component: CreateEmployeeComponent
+    component: RegisterEmployeeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: "Employee",
-    component: EmployeeListComponent
+    component: EmployeeListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: "Roles/Create",
-    component: CreateRolesComponent
+    component: CreateRolesComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

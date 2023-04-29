@@ -4,6 +4,7 @@ import OrganizationService from '../_services/organization-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterOrganizationRequest } from 'src/app/_requests/register-request';
 import { AddressRequest } from 'src/app/_requests/address-request';
+import { NotificationService } from 'src/app/_services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterCompanyComponent implements OnInit {
   constructor(
     _FormBuilder: FormBuilder,
     private organizationService: OrganizationService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.OrganizationForm = _FormBuilder.group({
       name: ["", [Validators.required, Validators.minLength(1), Validators.maxLength(200)]],
@@ -76,6 +78,7 @@ export class RegisterCompanyComponent implements OnInit {
     this.organizationService.Save(formData)
       .subscribe(data => {
         if (!data) return;
+        this.notificationService.ShowSuccess("Organization Registered Successfully! Login to continue")
         this.router.navigate(["/user", "login"]);
       })
   }

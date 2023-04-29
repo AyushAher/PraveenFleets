@@ -9,6 +9,7 @@ import { ResponseInterceptor, ErrorInterceptor } from '../_helpers/interceptor';
 import { JwtInterceptor } from '../_helpers/jwtinterceptor';
 import { MatButtonModule } from '@angular/material/button';
 import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
     ReactiveFormsModule,
     HttpClientModule,
     MatButtonModule,
+    MatSnackBarModule,
   ],
   providers: [
     {

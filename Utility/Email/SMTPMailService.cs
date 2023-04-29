@@ -95,7 +95,7 @@ namespace Utility.Email
                     smtpClient.Credentials = new NetworkCredential(_mailConfig.UserName, _mailConfig.Password);
                 }
 
-                if (!string.IsNullOrEmpty(_mailConfig.TargetName)) smtpClient.TargetName = _mailConfig.TargetName;
+                //if (!string.IsNullOrEmpty(_mailConfig.TargetName)) smtpClient.TargetName = _mailConfig.TargetName;
                 
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.Timeout = 600000;
@@ -180,7 +180,7 @@ namespace Utility.Email
             mailMessage.BodyEncoding = Encoding.UTF8;
 
             var alternateViewFromString = AlternateView.CreateAlternateViewFromString(request.Body, Encoding.UTF8, "text/html");
-
+            /*
             if (!string.IsNullOrEmpty(_mailConfig.Logo) &&
                 request.Body.IndexOf("companyLogo.img", StringComparison.InvariantCultureIgnoreCase) > 0)
             {
@@ -188,6 +188,7 @@ namespace Utility.Email
                 linkedResource.ContentId = "companyLogo.img";
                 alternateViewFromString.LinkedResources.Add(linkedResource);
             }
+            */
 
             mailMessage.AlternateViews.Add(alternateViewFromString);
             mailMessage.SubjectEncoding = Encoding.UTF8;

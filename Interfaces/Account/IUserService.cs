@@ -1,4 +1,5 @@
-﻿using Shared.Configuration;
+﻿using Domain.Account;
+using Shared.Configuration;
 using Shared.Requests.Account;
 using Shared.Responses.Account;
 
@@ -6,7 +7,7 @@ namespace Interfaces.Account;
 
 public interface IUserService : IService
 {
-    Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request);
+    Task<ApiResponse<UserResponse>> RegisterUserAsync(RegisterRequest request, bool isAdmin = false);
 
     Task<ApiResponse<TokenResponse>> LoginAsync(LoginRequest request);
 
@@ -35,5 +36,10 @@ public interface IUserService : IService
     Task<ApiResponse<bool>> ConfirmEMailAddressChange(UpdateEmailRequest request);
 
     Task<ApiResponse<bool>> UserExists(string email);
+
+    
+    Task<bool> SendConfirmEMailCode(ApplicationUser user);
+    
+    Task<bool> SendConfirmEMailCode(Guid userId);
 }
 

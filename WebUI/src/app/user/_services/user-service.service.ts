@@ -95,7 +95,7 @@ export class UserService {
   logout() {
     localStorage.clear();
     this.userSubject.next(null);
-    this.router.navigate(['/user/login']);
+    this.router.navigate(['/user', 'login']);
   }
 
 

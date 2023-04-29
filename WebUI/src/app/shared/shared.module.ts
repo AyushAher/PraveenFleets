@@ -12,7 +12,9 @@ import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { SideNavBarComponent } from './layout/side-nav-bar/side-nav-bar.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { SnackbarComponent } from './snackbar/snackbar.component';
 
 
 @NgModule({
@@ -21,6 +23,7 @@ import { RouterModule } from '@angular/router';
     LayoutComponent,
     NavBarComponent,
     SideNavBarComponent,
+    SnackbarComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,9 @@ import { RouterModule } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule,
+    MatIconModule
   ],
 
   providers: [
