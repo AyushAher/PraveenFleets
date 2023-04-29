@@ -21,6 +21,8 @@ import { OrganizationDashboardComponent } from './dashboard/dashboard.component'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
 import { MatIconModule } from '@angular/material/icon';
+import { ScheduleTripComponent } from './trips/schedule-trip.component';
+import { TripsModule } from '../trips/trips.module';
 
 
 @NgModule({
@@ -30,7 +32,8 @@ import { MatIconModule } from '@angular/material/icon';
     CreateRolesComponent,
     EmployeeListComponent,
     OrganizationDashboardComponent,
-    RegisterEmployeeComponent
+    RegisterEmployeeComponent,
+    ScheduleTripComponent,
   ],
   imports: [
     CommonModule,
@@ -45,7 +48,8 @@ import { MatIconModule } from '@angular/material/icon';
     SharedModule,
     MatInputModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    TripsModule
   ],
 
   providers: [

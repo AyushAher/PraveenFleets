@@ -82,7 +82,18 @@ h3 {
 /* .ag-paging-panel , 
 .ag-paging-panel .ag-icon */
 .mat-focus-indicator.mat-raised-button.mat-button-base.mat-primary,
+.mat-checkbox-checked.mat-primary .mat-checkbox-background,
 .mat-step-icon.mat-step-icon-state-number.mat-step-icon-selected {
   color: white;
-  background-color: #008cff !important;
+  background-color: var(--secondaryColor) !important;
+}
+
+
+h5 {
+  font-size: 20px !important;
+  text-decoration: underline;
+}
+
+.btnGrp>button {
+  margin: 0 15px !important;
 }

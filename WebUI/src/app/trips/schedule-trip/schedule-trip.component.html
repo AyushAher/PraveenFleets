@@ -1,0 +1,91 @@
+<form>
+    <div class="row">
+        <div class="col-md-4">
+            <mat-checkbox class="example-margin" color="primary">Office</mat-checkbox>
+        </div>
+        <div class="col-md-4">
+            <mat-checkbox class="example-margin" color="primary">Out Station</mat-checkbox>
+        </div>
+        <div class="col-md-4">
+            <mat-form-field appearance="fill" floatLabel="auto">
+                <mat-label>Vehicle Type</mat-label>
+                <mat-select required>
+                    <mat-option>--</mat-option>
+                    <!-- <mat-option *ngFor="let animal of animals" [value]="animal">
+                            {{animal.name}}
+                        </mat-option> -->
+                </mat-select>
+                <!-- <mat-error *ngIf="animalControl.hasError('required')">Please choose an animal</mat-error>
+                    <mat-hint>{{animalControl.value?.sound}}</mat-hint> -->
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <mat-form-field appearance="fill" floatLabel="auto">
+                <mat-label>Passenger Email Id</mat-label>
+                <input matInput required>
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <mat-form-field appearance="fill" floatLabel="auto">
+                <mat-label>Passenger Name</mat-label>
+                <input matInput required>
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Pick Up Date</mat-label>
+                        <input matInput required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Pick Up Time</mat-label>
+                        <input matInput required>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Est. Drop Date</mat-label>
+                        <input matInput required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill" floatLabel="auto">
+                        <mat-label>Est. Drop Time</mat-label>
+                        <input matInput required>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pickUpAddress my-5">
+        <h5>Pick Up Address</h5>
+        <shared-address></shared-address>
+    </div>
+    <div class="dropAddress my-5">
+        <h5>Drop Address</h5>
+        <shared-address></shared-address>
+    </div>
+
+    <div class="actions">
+        <div class="d-flex justify-content-between">
+            <div class="">
+                <mat-checkbox class="example-margin" color="primary">
+                    Schedule for Multiple Dates <br>
+                    <small>(Only Applicable for Office Travels)</small>
+                </mat-checkbox>
+            </div>
+            <div class="btnGrp">
+                <button mat-raised-button color="warn">Cancel</button>
+                <button mat-raised-button color="accent">Save as Draft</button>
+                <button mat-raised-button color="primary">Submit for Approval</button>
+            </div>
+        </div>
+    </div>
+</form>
