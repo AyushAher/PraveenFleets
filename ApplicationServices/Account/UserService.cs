@@ -274,7 +274,7 @@ public class UserService : IUserService
                 _ = await SendWelcomeEMail(user);
 
                 return await BaseApiResponse.SuccessAsync(
-                    string.Format("Account Confirmed for '{0}'. You can now use DG Cap", user.FullName));
+                    string.Format("Account Confirmed for '{0}'. You can now use DigiCab", user.FullName));
             }
 
             _logger.LogError("Unable to confirm user with " + request.EMail + ". Identity returned error.");
@@ -367,7 +367,7 @@ public class UserService : IUserService
             if (byEmailAsync == null)
             {
                 _logger.LogError("User {0} is not found while resetting the password!", request.EMail);
-                return await BaseApiResponse.FailAsync("Invalid User! Contact DG Cap Support.", _logger);
+                return await BaseApiResponse.FailAsync("Invalid User! Contact DigiCab Support.", _logger);
             }
 
             var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));

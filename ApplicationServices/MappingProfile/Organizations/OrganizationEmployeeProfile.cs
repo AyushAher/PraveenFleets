@@ -15,7 +15,7 @@ public class OrganizationEmployeeProfile : Profile
             .ForMember(x => x.WeeklyOff, opt => opt.Ignore())
             .ReverseMap()
             .ForMember(x => x.WeeklyOff, opt => opt.Ignore());
-        
+
         CreateMap<OrganizationEmployeeRequest, OrganizationEmployeeResponse>()
             .ReverseMap();
         

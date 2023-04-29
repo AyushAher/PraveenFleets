@@ -4,12 +4,13 @@ import { map } from "rxjs";
 import { ApiResponse } from "src/app/_models/api-response";
 import { RegisterUserRequest } from "src/app/_requests/register-request";
 import OrganizationEmployeeResponse from "src/app/_responses/organization-employee-response";
+import EnumService from "src/app/_services/enum.service";
 import { environment } from "src/environments/environment";
 
 @Injectable({ providedIn: "any" })
 export default class OrganizationEmployeeService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private enumService: EnumService) { }
 
     RegisterEmployee(FormData: RegisterUserRequest) {
         return this.http.post<ApiResponse<OrganizationEmployeeResponse>>(`${environment.apiUrl}/OrganizationEmployee/RegisterEmployee`, FormData)

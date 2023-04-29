@@ -17,6 +17,7 @@ export default class OrganizationEmployeeResponse implements UserResponse {
     token: LoginResponse;
     parentEntityId: string;
     userType: number;
+    salutation: number;
 
     UserId: string;
     AddressId: string;

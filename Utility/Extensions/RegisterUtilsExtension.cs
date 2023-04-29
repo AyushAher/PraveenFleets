@@ -57,11 +57,11 @@ namespace Utility.Extensions
         {
             var lst = Enum.GetValues(typeof(T));
 
-            var lstGender =
+            var lstEnums =
                 (from T val in lst
                     select new EnumResponse { Value = val, ValueDescription = val.ToDescriptionString() }).ToList();
 
-            return await ApiResponse<List<EnumResponse>>.SuccessAsync(lstGender);
+            return await ApiResponse<List<EnumResponse>>.SuccessAsync(lstEnums);
         }
     }
 }

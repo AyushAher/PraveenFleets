@@ -1,8 +1,10 @@
-﻿namespace Enums.Employee;
+﻿using System.ComponentModel;
+
+namespace Enums.Employee;
 
 public enum Salutation : byte
 {
-    Mr = 10,
-    Ms = 20,
-    Mrs = 30
+    [Description("Mr.")] Mr = 10,
+    [Description("Ms.")] Ms = 20,
+    [Description("Mrs.")] Mrs = 30
 }
