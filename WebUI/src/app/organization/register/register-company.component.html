@@ -3,7 +3,7 @@
         <button mat-raised-button color="accent" [routerLink]="['/user','login']"> Back to Login</button>
     </div>
 
-    <mat-stepper [linear]="false" #stepper>
+    <mat-stepper [linear]="true" #stepper>
         <mat-step [stepControl]="OrganizationForm" label="Organization Details">
             <form [formGroup]="OrganizationForm">
                 <div class="row my-3">
