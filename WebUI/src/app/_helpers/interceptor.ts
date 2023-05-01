@@ -63,7 +63,7 @@ export class ResponseInterceptor implements http.HttpInterceptor {
             tap((event: http.HttpEvent<ApiResponse<any>>) => {
                 if (event instanceof http.HttpResponse) {
                     // change the response body here
-                    debugger;
+                    // debugger;
                     if (event.body?.failed) this.notificationService.ShowError(event.body.messages);
                     var eve = event.clone({
                         body: event.body?.data

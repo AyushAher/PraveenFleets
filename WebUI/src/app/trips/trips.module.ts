@@ -15,6 +15,8 @@ import { SharedModule } from '../shared/shared.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatButtonModule,
     SharedModule,
     MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
 
   ],
   providers: [

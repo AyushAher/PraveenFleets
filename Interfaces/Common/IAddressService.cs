@@ -6,5 +6,7 @@ namespace Interfaces.Common;
 
 public interface IAddressService
 {
-    public Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request,bool isInTransaction = false);
+    Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request,bool isInTransaction = false);
+    
+    Task<ApiResponse<AddressResponse>> GetAddressByParentId(Guid parentId);
 }

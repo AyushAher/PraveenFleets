@@ -6,11 +6,11 @@ namespace Shared.Responses.Trips;
 
 public class ScheduleTripResponse
 {
-    public string PassengerUserEmail { get; set; }
+    public string PassengerEmailId { get; set; }
     public bool Office { get; set; }
     public bool OutStation { get; set; }
     public Guid PassengerUserId { get; set; }
-    public Guid VehicleTypeId { get; set; }
+    public VehicleTypes VehicleType { get; set; }
     public AddressResponse PickUpAddress { get; set; }
     public AddressResponse DropAddress { get; set; }
     public TimeSpan DropTime { get; set; }

@@ -60,10 +60,10 @@ public class TripService : ITripService
     {
         try
         {
-            var tripId = new Guid();
+            var tripId = Guid.NewGuid();
             // Check if user exists in or. with that email
             var passengerOrgEmployeeRecord = _unitOfWork.Repository<OrganizationEmployee>().Entities
-                .FirstOrDefault(x => x.Email == request.PassengerUserEmail);
+                .FirstOrDefault(x => x.Email == request.PassengerEmailId);
 
             if (passengerOrgEmployeeRecord == null)
             {
@@ -97,8 +97,7 @@ public class TripService : ITripService
                 return await ApiResponse<ScheduleTripResponse>.FailAsync(dropAddressRequest.Messages,
                     _logger);
             }
-
-            // TODO: Save vehicle type to listTypeItems or as enums?
+            
 
             var mappedObj = _mapper.Map<Trip>(request);
             mappedObj.Id = tripId;

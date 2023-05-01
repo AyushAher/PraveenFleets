@@ -1,4 +1,5 @@
 ﻿using Interfaces.MasterData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
 using Shared.Requests.MasterData;
@@ -8,7 +9,7 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class MasterDataController : ControllerBase
 {
     private readonly IMasterDataService _masterDataService;

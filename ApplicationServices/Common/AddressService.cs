@@ -1,4 +1,5 @@
-﻿using ApplicationServices.MappingProfile.Common;
+﻿using System.Text;
+using ApplicationServices.MappingProfile.Common;
 using AutoMapper;
 using DB.Extensions;
 using Domain.Common;
@@ -16,11 +17,13 @@ public class AddressService : IAddressService
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly ICacheConfiguration<Address> _cache;
+    private readonly ICacheConfiguration<AddressResponse> _responseCache;
     private readonly IUnitOfWork<Guid> _unitOfWork;
     private readonly IRepositoryAsync<Address, Guid> _addressRepo;
 
     public AddressService(
         ICacheConfiguration<Address> cache,
+        ICacheConfiguration<AddressResponse> responseCache,
         IMapper mapper,
         IUnitOfWork<Guid> unitOfWork,
         ILogger<AddressService> logger
@@ -31,6 +34,7 @@ public class AddressService : IAddressService
         _logger = logger;
         _cache = cache;
         _addressRepo = _unitOfWork.Repository<Address>();
+        _responseCache = responseCache;
     }
 
     public async Task<ApiResponse<AddressResponse>> CreateAddress(AddressRequest request, bool isInTransaction = false)
@@ -51,7 +55,7 @@ public class AddressService : IAddressService
                 return await ApiResponse<AddressResponse>.FailAsync(addressValidator.Errors, _logger);
             }
 
-            if(!isInTransaction) _ = await _unitOfWork.StartTransaction();
+            if (!isInTransaction) _ = await _unitOfWork.StartTransaction();
 
             // Add record
             _ = await _addressRepo.AddAsync(addressObj);
@@ -79,6 +83,29 @@ public class AddressService : IAddressService
         catch (Exception e)
         {
             await _unitOfWork.Rollback();
+            return await ApiResponse<AddressResponse>.FatalAsync(e, _logger);
+        }
+    }
+
+    public async Task<ApiResponse<AddressResponse>> GetAddressByParentId(Guid parentId)
+    {
+        try
+        {
+            var queryObj = _addressRepo.Entities.FirstOrDefault(x => x.ParentId == parentId);
+            if (queryObj == null)
+            {
+                return await ApiResponse<AddressResponse>.FailAsync("Address not found", _logger);
+            }
+
+            var mappedObj = _mapper.Map<AddressResponse>(queryObj);
+            
+            _responseCache.SetInCacheMemoryAsync(mappedObj);
+            _cache.SetInCacheMemoryAsync(queryObj);
+
+            return await ApiResponse<AddressResponse>.SuccessAsync(mappedObj);
+        }
+        catch (Exception e)
+        {
             return await ApiResponse<AddressResponse>.FatalAsync(e, _logger);
         }
     }

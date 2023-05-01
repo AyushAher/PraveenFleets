@@ -1,4 +1,5 @@
 ﻿using Interfaces.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
 using Shared.Requests.Account;
@@ -7,7 +8,7 @@ namespace Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class RolesController : ControllerBase
 {
 

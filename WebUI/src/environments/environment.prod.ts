@@ -4,6 +4,8 @@ export const environment = {
   enumNames: {
     Gender: "Gender",
     Salutation: "Salutation",
-    WeekDays: "WeekDays"
+    WeekDays: "WeekDays",
+    VehicleTypes: "VehicleTypes"
+
   }
 };

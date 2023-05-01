@@ -180,6 +180,7 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
             if (cacheObject.Count == await _unitOfWork.Repository<Vw_OrganizationEmployee>().GetCount())
             {
                 lstResponse = _mapper.Map<List<OrganizationEmployeeResponse>>(cacheObject);
+                lstResponse.ForEach(x => x.Address = _addressService.GetAddressByParentId(x.UserId).Result.Data);
                 return await ApiResponse<List<OrganizationEmployeeResponse>>.SuccessAsync(lstResponse);
             }
 
@@ -189,7 +190,12 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
             
             dbObject.ForEach(x => _vwOrgEmployeeCache.SetInCacheMemoryAsync(x));
             lstResponse = _mapper.Map<List<OrganizationEmployeeResponse>>(dbObject);
-            
+            lstResponse.ForEach(x =>
+            {
+                x.Address = _addressService.GetAddressByParentId(x.UserId).Result.Data;
+            });
+
+
             return await ApiResponse<List<OrganizationEmployeeResponse>>.SuccessAsync(lstResponse);
         }
         catch (Exception e)

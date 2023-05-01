@@ -19,8 +19,8 @@ export default class OrganizationEmployeeResponse implements UserResponse {
     userType: number;
     salutation: number;
 
-    UserId: string;
-    AddressId: string;
-    Address: AddressResponse;
+    userId: string;
+    addressId: string;
+    address: AddressResponse;
 
 } 

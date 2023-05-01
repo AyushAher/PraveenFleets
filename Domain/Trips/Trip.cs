@@ -9,7 +9,7 @@ public class Trip : EntityTemplate<Guid>
     // TODO: Map Foreign Keys in MySQL
     public bool Office { get; set; }
     public bool OutStation { get; set; }
-    public Guid VehicleTypeId { get; set; }
+    public VehicleTypes VehicleType { get; set; }
     public Guid PassengerUserId { get; set; }
     public Guid PickUpAddressId { get; set; }
     public Guid DropAddressId { get; set; }

@@ -19,7 +19,7 @@ export class SnackbarComponent {
         break;
 
       case "Info":
-        this.titleColor.color = "blue";
+        this.titleColor.color = "var(--secondaryColor)";
         break;
 
       case "Warn":
