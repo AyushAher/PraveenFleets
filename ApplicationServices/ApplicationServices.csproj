@@ -29,6 +29,7 @@
 
 
 	<ItemGroup>
+	  <Folder Include="MappingProfile\Trips\" />
 	  <Folder Include="MappingProfile\Organizations\" />
 	  <Folder Include="Organizations\" />
 	</ItemGroup>

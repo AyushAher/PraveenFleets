@@ -23,6 +23,7 @@ import { RegisterEmployeeComponent } from './register-employee/register-employee
 import { MatIconModule } from '@angular/material/icon';
 import { ScheduleTripComponent } from './trips/schedule-trip.component';
 import { TripsModule } from '../trips/trips.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { TripsModule } from '../trips/trips.module';
     MatInputModule,
     MatSnackBarModule,
     MatIconModule,
-    TripsModule
+    TripsModule,
+    MatDatepickerModule
   ],
 
   providers: [

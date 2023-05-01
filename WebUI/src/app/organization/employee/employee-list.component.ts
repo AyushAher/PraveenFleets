@@ -20,7 +20,11 @@ export class EmployeeListComponent implements OnInit {
 
   ngOnInit(): void {
     this.organizationEmployeeService.GetAllOrganizationEmployees()
-      .subscribe(data => this.List = data)
+      .subscribe(data => {
+        console.log(data);
+
+        this.List = data
+      })
 
     this.columnDefs = this.createColumnDefs();
 
@@ -34,6 +38,14 @@ export class EmployeeListComponent implements OnInit {
         enableSorting: true,
         sortable: true,
         tooltipField: "fullName",
+      },
+      {
+        headerName: "Email",
+        field: "email",
+        filter: true,
+        enableSorting: true,
+        sortable: true,
+        tooltipField: "email",
       },
       {
         headerName: "Role",

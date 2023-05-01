@@ -5,13 +5,16 @@ using ApplicationServices.FileShare;
 using ApplicationServices.MasterData;
 using ApplicationServices.Organizations;
 using ApplicationServices.Repository;
+using ApplicationServices.Trips;
 using ApplicationServices.Weatherforecast;
+using Domain.Trips;
 using Interfaces;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.FileShare;
 using Interfaces.MasterData;
 using Interfaces.Organizations;
+using Interfaces.Trips;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,6 +69,10 @@ public static class AppServiceCollectionExtensions
         services.AddScoped<IOrganizationService, OrganizationService>();
         services.AddScoped<IOrganizationUserService, OrganizationUserService>();
         services.AddScoped<IOrganizationEmployeeService, OrganizationEmployeeService>();
+
+
+        // Trips
+        services.AddTransient<ITripService, TripService>();
 
         return services;
     }

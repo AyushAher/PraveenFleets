@@ -14,7 +14,7 @@ import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule,
     SharedModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatNativeDateModule
   ],
   providers: [
     {
@@ -57,7 +58,7 @@ import { MatIconModule } from '@angular/material/icon';
         horizontalPosition: "right",
         verticalPosition: "top"
       }
-    }
+    },
   ],
   bootstrap: [AppComponent],
 })

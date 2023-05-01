@@ -4,6 +4,7 @@ using Domain.FileShare;
 using Domain.Mail;
 using Domain.MasterData;
 using Domain.Organization;
+using Domain.Trips;
 using Interfaces.Account;
 using Microsoft.EntityFrameworkCore;
 
@@ -159,7 +160,15 @@ public class ApplicationDbContext : AppIdentityDbContext
 
         #endregion
 
+        #region Trips
 
+        builder.Entity<Trip>(entity =>
+        {
+            entity.ToTable("Trip");
+            entity.HasKey(e => e.Id);
+        });
+
+        #endregion
 
     }
 }

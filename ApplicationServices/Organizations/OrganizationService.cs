@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Organization;
 using Shared.Responses.Organization;
+using Utility.Email;
 using static Shared.Configuration.PermissionsConfiguration;
 
 namespace ApplicationServices.Organizations;
@@ -27,6 +28,9 @@ public class OrganizationService : IOrganizationService
     private readonly IOrganizationUserService _organizationUserService;
     private readonly IOrganizationEmployeeService _organizationEmployeeService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IEMailService _eMailService;
+    private readonly IMailGenerator _mailGenerator;
+        
 
     private const string AdminRoleName = "Admin";
 
@@ -40,7 +44,9 @@ public class OrganizationService : IOrganizationService
         IOrganizationRolesService organizationRolesService,
         IOrganizationUserService organizationUserService,
         IOrganizationEmployeeService organizationEmployeeService,
-        ICurrentUserService currentUserService
+        ICurrentUserService currentUserService,
+        IEMailService eMailService,
+        IMailGenerator mailGenerator
     )
     {
         _mapper = mapper;
@@ -54,6 +60,8 @@ public class OrganizationService : IOrganizationService
         _organizationUserService = organizationUserService;
         _organizationEmployeeService = organizationEmployeeService;
         _currentUserService = currentUserService;
+        _mailGenerator = mailGenerator;
+        _eMailService = eMailService;
     }
 
 
@@ -167,7 +175,7 @@ public class OrganizationService : IOrganizationService
 
             // Send Emails
             _ = await _userService.SendConfirmEMailCode(adminRegisterRequest.Data.Id);
-            // TODO: Send New Organization Email
+            await SendOrgWelcomeEmail(responseObj, adminRegisterRequest.Data.Email);
 
 
             return await ApiResponse<OrganizationResponse>.SuccessAsync(responseObj);
@@ -208,4 +216,19 @@ public class OrganizationService : IOrganizationService
         }
     }
 
+
+    private async Task SendOrgWelcomeEmail(OrganizationResponse response, string emailId)
+    {
+        _mailGenerator.NewOrganizationRegistration(response.Name, out var mailContent, out var mailSubject);
+        if (mailContent == string.Empty) return;
+
+        var request = new EMailRequest
+        {
+            Body = mailContent,
+            Subject = mailSubject,
+        };
+        
+        request.ToAddresses.Add(new EMailAddress(response.Name, emailId));
+        await _eMailService.SendEMailAsync(request);
+    }
 }

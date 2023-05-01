@@ -36,8 +36,11 @@
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" floatLabel="auto">
                         <mat-label>Pick Up Date</mat-label>
-                        <input matInput required>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
+
                 </div>
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" floatLabel="auto">
@@ -52,7 +55,9 @@
                 <div class="col-md-6">
                     <mat-form-field appearance="fill" floatLabel="auto">
                         <mat-label>Est. Drop Date</mat-label>
-                        <input matInput required>
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
                 <div class="col-md-6">
@@ -66,11 +71,11 @@
     </div>
     <div class="pickUpAddress my-5">
         <h5>Pick Up Address</h5>
-        <shared-address></shared-address>
+        <shared-address [(AddressForm)]="pickUpAddressForm"></shared-address>
     </div>
     <div class="dropAddress my-5">
         <h5>Drop Address</h5>
-        <shared-address></shared-address>
+        <shared-address [(AddressForm)]="dropAddressForm"></shared-address>
     </div>
 
     <div class="actions">

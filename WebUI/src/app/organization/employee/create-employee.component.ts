@@ -90,7 +90,6 @@ export class CreateEmployeeComponent implements OnInit {
       .subscribe(value => this.EmployeeForm.patchValue({ 'address': value }))
 
 
-
     if (this.user)
       this.organizationRoleService.GetAllByOrganization(this.user.parentEntityId)
         .subscribe(organizationRoles => this.RoleList = organizationRoles)

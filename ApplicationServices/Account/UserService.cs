@@ -135,8 +135,6 @@ public class UserService : IUserService
 
             _logger.LogInformation("Attaching the user {0} to {1}!", request.Email, request.Role);
 
-            // TODO Send Emails
-
             if (!isAdmin) _ = await SendConfirmEMailCode(user);
             _logger.LogInformation("User {0} created successfully!", request.Email);
 
