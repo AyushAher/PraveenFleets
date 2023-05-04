@@ -30,4 +30,18 @@ export class TripsService {
         })
       )
   }
+
+  GetTripsByCurrentOrg() {
+    return this.http.get<ApiResponse<TripsResponse[]>>(`${environment.apiUrl}/Trips/GetTripsByCurrentOrg`)
+      .pipe(
+        map((x: ApiResponse<TripsResponse[]>) => {
+          if (x.failed) return []
+          if (!x.data) {
+            this.notificationService.ShowError("Unable to get Trip Data")
+            return []
+          };
+          return x.data;
+        })
+      )
+  }
 }

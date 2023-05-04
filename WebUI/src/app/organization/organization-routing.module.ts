@@ -7,6 +7,7 @@ import { EmployeeListComponent } from './employee/employee-list.component';
 import { RegisterEmployeeComponent } from './register-employee/register-employee.component';
 import { AuthGuard } from '../_helpers/auth.guard';
 import { ScheduleTripComponent } from './trips/schedule-trip.component';
+import { TripsListComponent } from './trips/trips-list.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: "Roles/Create",
     component: CreateRolesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "Trips",
+    component: TripsListComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -167,6 +167,12 @@ public class ApplicationDbContext : AppIdentityDbContext
             entity.ToTable("Trip");
             entity.HasKey(e => e.Id);
         });
+        
+        builder.Entity<Vw_Organization_Trips>(entity =>
+        {
+            entity.ToTable("vw_organization_trips");
+            entity.HasKey(e => e.Id);
+        });
 
         #endregion
 

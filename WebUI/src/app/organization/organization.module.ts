@@ -24,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ScheduleTripComponent } from './trips/schedule-trip.component';
 import { TripsModule } from '../trips/trips.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { TripsListComponent } from './trips/trips-list.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     OrganizationDashboardComponent,
     RegisterEmployeeComponent,
     ScheduleTripComponent,
+    TripsListComponent,
   ],
   imports: [
     CommonModule,

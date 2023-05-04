@@ -10,7 +10,6 @@ using Shared.Configuration;
 using Shared.Requests.Organization;
 using Shared.Responses.Organization;
 using Utility.Email;
-using static Shared.Configuration.PermissionsConfiguration;
 
 namespace ApplicationServices.Organizations;
 

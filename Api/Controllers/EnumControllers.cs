@@ -1,6 +1,5 @@
 ﻿using Enums.Employee;
 using Enums.Trips;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
 using Shared.Responses.Common;

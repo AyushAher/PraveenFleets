@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Domain.Account;
 
 namespace Domain.Common;
@@ -9,6 +10,7 @@ public class Entity<TId> : IEntity<TId>
 
 public class EntityTemplate<TId> : IAuditableEntity<TId>
 {
+    [Key]
     public TId Id { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }

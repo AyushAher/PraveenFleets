@@ -1,17 +1,15 @@
-﻿using ApplicationServices.Organizations;
-using AutoMapper;
+﻿using AutoMapper;
 using DB.Extensions;
 using Domain.Organization;
 using Domain.Trips;
 using Enums.Trips;
 using Interfaces.Account;
 using Interfaces.Common;
-using Interfaces.Organizations;
 using Interfaces.Trips;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.Configuration;
 using Shared.Requests.Trips;
-using Shared.Responses.Organization;
 using Shared.Responses.Trips;
 using Utility.Email;
 
@@ -24,6 +22,7 @@ public class TripService : ITripService
     private readonly IUnitOfWork<Guid> _unitOfWork;
     private readonly IRepositoryAsync<Trip, Guid> _tripRepo;
     private readonly ICacheConfiguration<Trip> _cache;
+    private readonly ICacheConfiguration<Vw_Organization_Trips> _tripViewCache;
     private readonly IAddressService _addressService;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
@@ -37,6 +36,7 @@ public class TripService : ITripService
         ILogger<TripService> logger,
         IUnitOfWork<Guid> unitOfWork,
         ICacheConfiguration<Trip> cache,
+        ICacheConfiguration<Vw_Organization_Trips> tripViewCache,
         IAddressService addressService,
         IUserService userService,
         ICurrentUserService currentUserService,
@@ -54,6 +54,8 @@ public class TripService : ITripService
         _currentUserService = currentUserService;
         _mailGenerator = mailGenerator;
         _eMailService = eMailService;
+        _tripViewCache = tripViewCache;
+
     }
 
     public async Task<ApiResponse<ScheduleTripResponse>> SaveTripDraft(ScheduleTripRequest request)
@@ -133,6 +135,34 @@ public class TripService : ITripService
         catch (Exception e)
         {
             return await ApiResponse<ScheduleTripResponse>.FatalAsync(e, _logger);
+        }
+    }
+
+    public async Task<ApiResponse<List<ScheduleTripResponse>>> GetTripsByCurrentOrg()
+    {
+        try
+        {
+            var cacheObject = await _tripViewCache.GetAllFromCacheMemoryAsync();
+            if (cacheObject.Count == await _unitOfWork.Repository<Vw_Organization_Trips>().GetCount())
+            {
+                cacheObject = cacheObject.Where(x => x.OrganizationId == _currentUserService.ParentEntityId)
+                    .ToList();
+
+                var cacheMappedObj = _mapper.Map<List<ScheduleTripResponse>>(cacheObject);
+                return await ApiResponse<List<ScheduleTripResponse>>.SuccessAsync(cacheMappedObj);
+            }
+
+            var tripsForCurrentOrg = await _unitOfWork.Repository<Vw_Organization_Trips>().Entities
+                .Where(x => x.OrganizationId == _currentUserService.ParentEntityId).ToListAsync();
+            
+            _tripViewCache.SetInCacheMemoryAsync(tripsForCurrentOrg);
+            var mappedObj = _mapper.Map<List<ScheduleTripResponse>>(tripsForCurrentOrg);
+
+            return await ApiResponse<List<ScheduleTripResponse>>.SuccessAsync(mappedObj);
+        }
+        catch (Exception e)
+        {
+            return await ApiResponse<List<ScheduleTripResponse>>.FatalAsync(e, _logger);
         }
     }
 }

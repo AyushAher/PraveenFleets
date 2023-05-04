@@ -151,7 +151,7 @@ public class OrganizationRoleService : IOrganizationRolesService
             }
 
             var getFromCache =
-                await _cache.GetAllFromCacheMemoryAsync(new());
+                await _cache.GetAllFromCacheMemoryAsync();
 
             if (getFromCache is { Count: > 0 } && getFromCache.Count ==
                 _organizationRolesRepo.Entities.Count(x => x.OrganizationId == organizationId))

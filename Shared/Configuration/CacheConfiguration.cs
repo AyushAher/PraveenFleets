@@ -96,8 +96,9 @@ public sealed class CacheConfiguration<T> : ICacheConfiguration<T>
     /// </summary>
     /// <param name="obj">Model Class</param>
     /// <returns>List of Model Classes with data</returns>
-    public async Task<List<T?>> GetAllFromCacheMemoryAsync(T obj)
+    public async Task<List<T?>> GetAllFromCacheMemoryAsync()
     {
+        var obj = Activator.CreateInstance<T>();
         var cacheObj = GetCacheObj(obj);
         var cacheValue = await cacheObj.CacheDatabase!.HashGetAllAsync(cacheObj.Key);
         return Array.ConvertAll(cacheValue, val =>
@@ -116,7 +117,7 @@ public sealed class CacheConfiguration<T> : ICacheConfiguration<T>
             var cacheObj = GetCacheObj(obj);
 
             var serialObj = JsonSerializer.Serialize(obj);
-            var allExistingKeys = await GetAllFromCacheMemoryAsync(obj);
+            var allExistingKeys = await GetAllFromCacheMemoryAsync();
             var size = allExistingKeys.Count + 1;
             HashEntry[] hashArray;
 
@@ -155,6 +156,10 @@ public sealed class CacheConfiguration<T> : ICacheConfiguration<T>
         await cacheObj.CacheDatabase!.HashDeleteAsync(cacheObj.Key, cacheObj.Id);
     }
 
+    public void SetInCacheMemoryAsync(List<T> list)
+        => list.ForEach(SetInCacheMemoryAsync);
+
+
 }
 
 public interface ICacheConfiguration<T>
@@ -172,7 +177,7 @@ public interface ICacheConfiguration<T>
     /// </summary>
     /// <param name="obj">Model Class</param>
     /// <returns>List of Model Classes with data</returns>
-    public Task<List<T?>> GetAllFromCacheMemoryAsync(T obj);
+    public Task<List<T?>> GetAllFromCacheMemoryAsync();
 
     /// <summary>
     /// Upserts Record in the Cache Memory
@@ -185,6 +190,8 @@ public interface ICacheConfiguration<T>
     /// </summary>
     /// <param name="obj">Model Class with Id</param>
     public void DeleteFromCacheMemory(T obj);
+
+    public void SetInCacheMemoryAsync(List<T> list);
 }
 
 

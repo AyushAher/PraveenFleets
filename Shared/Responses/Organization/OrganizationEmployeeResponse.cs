@@ -1,5 +1,4 @@
-﻿using Enums.Employee;
-using Shared.Responses.Account;
+﻿using Shared.Responses.Account;
 using Shared.Responses.Common;
 
 namespace Shared.Responses.Organization;

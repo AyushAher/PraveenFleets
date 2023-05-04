@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Shared.Configuration;
-
-namespace Utility.Email
+﻿namespace Utility.Email
 {
     public class MailGenerator : IMailGenerator
     {

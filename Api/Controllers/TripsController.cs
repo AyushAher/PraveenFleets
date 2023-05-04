@@ -1,6 +1,4 @@
-﻿using Interfaces.Account;
-using Interfaces.Common;
-using Interfaces.Trips;
+﻿using Interfaces.Trips;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Configuration;
@@ -18,9 +16,7 @@ public class TripsController : ControllerBase
     private readonly ITripService _tripService;
 
 
-    public TripsController(
-        ITripService tripService
-    )
+    public TripsController(ITripService tripService)
     {
         _tripService = tripService;
     }
@@ -28,4 +24,8 @@ public class TripsController : ControllerBase
     [HttpPost("SaveAsDraft")]
     public async Task<ApiResponse<ScheduleTripResponse>> SaveTripAsDraft(ScheduleTripRequest request)
         => await _tripService.SaveTripDraft(request);
+
+    [HttpGet("GetTripsByCurrentOrg")]
+    public async Task<ApiResponse<List<ScheduleTripResponse>>> GetTripsByCurrentOrg()
+        => await _tripService.GetTripsByCurrentOrg();
 }

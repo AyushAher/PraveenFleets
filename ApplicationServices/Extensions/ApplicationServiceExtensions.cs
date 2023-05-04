@@ -7,7 +7,6 @@ using ApplicationServices.Organizations;
 using ApplicationServices.Repository;
 using ApplicationServices.Trips;
 using ApplicationServices.Weatherforecast;
-using Domain.Trips;
 using Interfaces;
 using Interfaces.Account;
 using Interfaces.Common;

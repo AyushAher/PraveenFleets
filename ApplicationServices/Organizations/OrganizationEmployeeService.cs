@@ -1,5 +1,4 @@
-﻿using ApplicationServices.Account;
-using ApplicationServices.MappingProfile.Organizations;
+﻿using ApplicationServices.MappingProfile.Organizations;
 using AutoMapper;
 using DB.Extensions;
 using Domain.Organization;
@@ -7,7 +6,6 @@ using Enums.Account;
 using Interfaces.Account;
 using Interfaces.Common;
 using Interfaces.Organizations;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.Configuration;
@@ -176,7 +174,7 @@ public class OrganizationEmployeeService : IOrganizationEmployeeService
             // TODO get all data that is required
             List<OrganizationEmployeeResponse> lstResponse;
 
-            var cacheObject = await _vwOrgEmployeeCache.GetAllFromCacheMemoryAsync(new());
+            var cacheObject = await _vwOrgEmployeeCache.GetAllFromCacheMemoryAsync();
             if (cacheObject.Count == await _unitOfWork.Repository<Vw_OrganizationEmployee>().GetCount())
             {
                 lstResponse = _mapper.Map<List<OrganizationEmployeeResponse>>(cacheObject);

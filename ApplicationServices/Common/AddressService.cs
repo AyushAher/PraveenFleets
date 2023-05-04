@@ -1,5 +1,4 @@
-﻿using System.Text;
-using ApplicationServices.MappingProfile.Common;
+﻿using ApplicationServices.MappingProfile.Common;
 using AutoMapper;
 using DB.Extensions;
 using Domain.Common;

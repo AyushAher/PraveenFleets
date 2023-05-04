@@ -7,4 +7,5 @@ namespace Interfaces.Trips;
 public interface ITripService : IService
 {
     Task<ApiResponse<ScheduleTripResponse>> SaveTripDraft(ScheduleTripRequest request);
+    Task<ApiResponse<List<ScheduleTripResponse>>> GetTripsByCurrentOrg();
 }
